@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "950153550731",
+    "firebase_url": "https://quanlybanhang-34c55-default-rtdb.firebaseio.com",
+    "project_id": "quanlybanhang-34c55",
+    "storage_bucket": "quanlybanhang-34c55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950153550731:android:ad0ee1d612e8490bcf6d8e",
+        "android_client_info": {
+          "package_name": "com.reactnativefirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950153550731-hfrc7tlcbb28f6anuqke35qvaeadls29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEqfr6W0wV2pZQGN_Y8KuTs9iV_48a3mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950153550731-hfrc7tlcbb28f6anuqke35qvaeadls29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
