@@ -2,11 +2,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  TextInput,
-  Button,
-  TouchableOpacity,} from 'react-native';
-import React, {useState, useContext, useEffect, useLayoutEffect} from 'react';
+ } from 'react-native';
+import React, {useState, useContext, useEffect} from 'react';
 import { login } from '../firebase/auth';
 import InputCustom from '../components/Input'
 import ButtonCustom from '../components/Button';
@@ -15,6 +12,8 @@ import { UserContext } from '../contexts/userContext';
 import { Overlay } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { sizeIcon } from '../styleVariable';
+import Logo from '../share/Logo'
+import LottieView from 'lottie-react-native';
 
 export default function Login({navigation}) {
   const {ICON_INPUT} = sizeIcon
@@ -31,14 +30,18 @@ export default function Login({navigation}) {
   }
 
   useEffect(() => {
+   let isMounted = true
+   setLoading(false)
    setTimeout(() => {
-    setLoading(false)
-    if(userInfo) {
-      console.log(userInfo)
-      console.log('chuyển landing')
-      return  navigation.navigate('Landing')
+    if(isMounted) {
+      if(userInfo) {
+        console.log(userInfo)
+        console.log('chuyển landing')
+        return  navigation.navigate('Landing')
+      }
     }
-   }, 3000)
+   }, 1000)
+   return () => isMounted = false
   }, [])
 
   const handleLogin = () => {
@@ -63,7 +66,14 @@ export default function Login({navigation}) {
        <Overlay isVisible={loading}>
         <Text>Đang xử lý...</Text>
        </Overlay>
-      <Image style={styles.image} source={require("../assets/avatar.jpg")} />
+      <View>
+        <Logo/>
+      </View>
+      <LottieView
+      style={{width: 200,height: 200}}
+      source={require('../assets/lotties/login_eat.json')}
+      autoPlay
+      />
       {notify? (<Text style={{color: colors.prymary_color, margin: 20, fontSize: 16}}>{notify}</Text>): null}
       <View style={styles.inputView}>
       <InputCustom onfocus={handleFocusInput} placeholder="Email" leftIcon={<AntDesign name='mail' size={ICON_INPUT}/>} value={email} errorMessage={err} onChangeText={setEmail} />
@@ -71,6 +81,8 @@ export default function Login({navigation}) {
  
       <View style={styles.inputView}>
       <InputCustom
+        secureTextEntry={true}
+        onfocus={handleFocusInput}
         placeholder="Mật khẩu"
         value={password}
         onChangeText={setPassword}

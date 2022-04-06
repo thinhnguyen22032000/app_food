@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useContext, useState, useEffect} from 'react';
-import {Button} from 'react-native-elements';
+import {Button, Divider} from 'react-native-elements';
 import {firestore} from '../../firebase/config';
 import {handleUpload} from '../../firebase/helpers';
 import {UserContext} from '../../contexts/userContext';
@@ -38,7 +38,7 @@ export default function AddRestaurant({navigation}) {
   const [err, setErr] = useState(null)
   const [isHandle, setIsHandle] = useState(false)
 
-  console.log(userInfo.email);
+  // console.log(userInfo.email);
 
   const handleAddData = async () => {
     if(name !== '' && lang !== '' && lat !== '' && img != undefined ){
@@ -89,11 +89,22 @@ export default function AddRestaurant({navigation}) {
     setTagSelector(filterData);
   };
 
+  const handleFocusInput = () => {
+     setIsFocus(!isFocus)
+  }
+
   if (loading) return <Loading />;
 
   return (
     <ScrollView style={styles.container}>
+      <View style={{margin: 10}}>
+        <Text style={{color: colors.text_color, fontSize: 20}}>Chú ý:</Text>
+        <Text style={{color: colors.text_color}}>Sau khi đăng kí cửa hàng vui lòng đợi hoặc liên hệ quản trị viên để được phê duyệt</Text>
+        <Text style={{color: colors.text_color}}>{`(*) thông tin không thể trống`}</Text>
+      </View>
+      <Divider style={{marginBottom: 20}}/>
       <InputCustom
+       label={'Tên cửa hàng(*)'}
         placeholder="Tên cửa hàng"
         value={name}
         onChangeText={setName}
@@ -102,6 +113,8 @@ export default function AddRestaurant({navigation}) {
       />
 
       <InputCustom
+       label={'Tọa độ(*)'}
+        keyboardType='numeric'
         placeholder="Longitude"
         value={lang}
         onChangeText={setLang}
@@ -109,6 +122,7 @@ export default function AddRestaurant({navigation}) {
         errorMessage={err}
       />
       <InputCustom
+       label={'Tọa độ(*)'}
         placeholder="Latitude"
         value={lat}
         onChangeText={setLat}
@@ -140,13 +154,16 @@ export default function AddRestaurant({navigation}) {
       <View style={[styles.section, margin.mt20]}>
         <CategoriesSelector setCategory={setCategory}/>
       </View>
-      <CurrentImagePicker setImg={setImg} img={img} error={err} />
+      <CurrentImagePicker setImg={setImg} img={img} error={err} required />
       <View style={{marginTop: 10, marginBottom: 40}}>
+      <View style={{flex: 1, alignItems: 'center'}}>
       <ButtonCustom
         title={'Thêm mới'}
         bgColor={colors.blue_color}
         onPress={handleAddData}
+        width={'94%'}
       />
+      </View>
       </View>
     </ScrollView>
   );
@@ -154,8 +171,8 @@ export default function AddRestaurant({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
     padding: 10,
+    backgroundColor: colors.white_color
   },
   section: {
     flex: 1,

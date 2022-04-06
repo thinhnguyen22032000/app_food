@@ -1,29 +1,19 @@
 import { View, Text } from 'react-native'
 import SelectDropdown from 'react-native-select-dropdown'
 import React from 'react'
-import { colors } from '../styleVariable'
+import { colors } from '../../styleVariable'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 
-const timer = ["7", "8", "9", "10","11", "12", "13", "14", "15"]
+const promotions = ['0','10', '20', '30', '40', '50', '60', '70','80','90' ]
 
-const TimerSelect = ({setTimeOpen, setTimeClose, defaulText, timeOpen, timeClose}) => {
+const PromotionSelector = ({defaulText, setPromotion}) => {
 
-  let time
-  if(timeOpen){
-   time = timer.indexOf(`${timeOpen}`)
-  }else{
-    time = timer.indexOf(`${timeClose}`) 
-  }
 
   return (
     <SelectDropdown
-	data={timer}
+	data={promotions}
 	onSelect={(selectedItem, index) => {
-        if(setTimeClose){
-             setTimeClose(selectedItem)
-        }else{
-            setTimeOpen(selectedItem)
-        }
+       setPromotion(selectedItem)
 	}}
 	buttonTextAfterSelection={(selectedItem, index) => {
 		// text represented after item is selected
@@ -35,13 +25,12 @@ const TimerSelect = ({setTimeOpen, setTimeClose, defaulText, timeOpen, timeClose
 		// if data array is an array of objects then return item.property to represent item in dropdown
 		return item
 	}}
-    defaultValueByIndex = {time}
     defaultButtonText={defaulText}
     renderDropdownIcon={() => (<IconAntDesign name='down' size={12}/>)}
     buttonStyle={{
         backgroundColor: colors.white_color,
         height: 30,
-        width: 100,
+        width: '90%',
         borderColor: colors.borderColor,
         borderWidth: 1,
         borderRadius: 4,
@@ -56,4 +45,4 @@ const TimerSelect = ({setTimeOpen, setTimeClose, defaulText, timeOpen, timeClose
   )
 }
 
-export default TimerSelect
+export default PromotionSelector

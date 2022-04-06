@@ -64,10 +64,10 @@ const TagSelector = ({setTagSelector, tagSelector}) => {
     defaultButtonText='Chọn tag'
     renderDropdownIcon={() => (<IconAntDesign name='down' size={12}/>)}
     buttonStyle={{
-        backgroundColor: "#eee",
+        backgroundColor: colors.white_color,
         height: 30,
         width: 100,
-        borderColor: colors.gray_color,
+        borderColor: colors.borderColor,
         borderWidth: 1,
         borderRadius: 4,
     }}

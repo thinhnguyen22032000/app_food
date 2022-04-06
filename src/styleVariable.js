@@ -2,6 +2,7 @@ export const PRYMARY_COLOR = '#292929'
 
 export const colors = {
     prymary_color: "#f05123",
+    prymary_bg: "#f7b874",
     text_color:"#333" ,
     gray_color: "#666",
     desc_color: "#0000008a",
@@ -13,7 +14,8 @@ export const colors = {
     light_color: "#F1F1F1",
     yellow_color: "#c7c108",
     inputSearch_color: '#dbdad7',
-    blue_color: '#3241ed'
+    blue_color: '#3241ed',
+    borderColor: "#c6c9cf"
     
 }
 
@@ -46,7 +48,7 @@ export const img = {
 }
 
 export const container = {
-    padding: 20,
+    padding: 10,
 }
 
 export const row = {
@@ -98,17 +100,16 @@ export const tag = {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        minWidth: 80,
         width: 'auto',
         paddingBottom: 5,
         paddingTop: 5,
         paddingLeft: 10,
         paddingRight: 10,
-        borderRadius: 4,
+        borderRadius: 10,
         backgroundColor: colors.white_color,
         borderWidth: 1,
         height: 30,
-        borderColor: 'gray'
+        borderColor: '#c9cdd4'
       },
       tagActive: {
         color: colors.white_color,

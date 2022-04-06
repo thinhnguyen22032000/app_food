@@ -9,6 +9,7 @@ import { PRYMARY_COLOR } from '../styleVariable';
 import RestaurantDetail from '../screens/Maneger/RestaurantDetail';
 import RestaurantUpdate from '../screens/Maneger/RestaurantUpdate';
 import OverView from '../screens/Maneger/OverView';
+import Menu from '../screens/Maneger/Menu';
 const Stack = createNativeStackNavigator();
 
 export default function ManegerStack() {
@@ -17,7 +18,7 @@ export default function ManegerStack() {
    
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: '#fff', 
         },
         
         headerTintColor: PRYMARY_COLOR,
@@ -29,27 +30,31 @@ export default function ManegerStack() {
       <Stack.Screen
         name="Maneger"
         component={Maneger}
-        options={{headerShown: false}}></Stack.Screen>
+        options={{headerShown: false, headerTitleAlign: "center",}}></Stack.Screen>
       <Stack.Screen
         name="AddRestaurant"
         component={AddRestaurant}
-        options={{title: 'Thêm cửa hàng'}}></Stack.Screen>
+        options={{title: 'Thêm cửa hàng', headerShadowVisible: false, headerTitleAlign: "center",}}></Stack.Screen>
       <Stack.Screen
         name="Restaurants"
         component={Restaurants}
-        options={{title: 'Cửa hàng của tôi'}}></Stack.Screen>
+        options={{title: 'Cửa hàng của tôi', headerTitleAlign: "center",}}></Stack.Screen>
       <Stack.Screen
         name="RestaurantsPending"
         component={RestaurantsPending}
-        options={{title: 'Cửa hàng chờ'}}></Stack.Screen>
+        options={{title: 'Cửa hàng chờ', headerTitleAlign: "center", }}></Stack.Screen>
         <Stack.Screen
         name="OverView"
         component={OverView}
-        options={{title: 'Chi tiết'}}></Stack.Screen>
+        options={{title: 'Chi tiết', headerTitleAlign: "center",}}></Stack.Screen>
         <Stack.Screen
         name="RestaurantUpdate"
         component={RestaurantUpdate}
-        options={{title: 'Cập nhật'}}></Stack.Screen>
+        options={{title: 'Cập nhật', headerShadowVisible: false, headerTitleAlign: "center",}}></Stack.Screen>
+        <Stack.Screen
+        name="Menu"
+        component={Menu}
+        options={{title: 'Menu', headerTitleAlign: "center",}}></Stack.Screen>
     </Stack.Navigator>
   );
 }

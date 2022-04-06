@@ -15,6 +15,7 @@ export default function Tabs() {
   const {userInfo, setUserInfo, position} = useContext(UserContext);
 
   function onAuthStateChanged(user) {
+    console.log('change user')
     setUserInfo(user);
     console.log('user re-render: ' + userInfo);
     if (initializing) setInitializing(false);

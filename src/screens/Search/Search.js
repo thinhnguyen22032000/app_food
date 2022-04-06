@@ -15,17 +15,18 @@ import Position from '../../share/Position';
 import ItemView from '../../components/ResFlatListItem';
 import Slider from '../../components/Slider';
 import Categories from '../../share/Categories';
+import RestaurantSkeleton from '../../components/RestaurantSkeleton'
+import ResPromotion from '../../share/ResPromotion';
 
 export default function Search({navigation}) {
   const {position, setPosition, restaurants} = useContext(UserContext);
   const [positionName, setPositionName] = useState();
-
-  restaurants.map(item => {
-    console.log('res: ', item);
-  });
+  const [loading, setLoading] = useState(true)
+  
+  console.log('có rong ko: ', restaurants);
 
   return (
-    <View style={[container, styles.container]}>
+    <View style={[container]}>
       <View>
         <Position
           positionName={positionName}
@@ -40,19 +41,18 @@ export default function Search({navigation}) {
       <ScrollView style={{marginBottom: 100, width: "100%" }}>
         <Slider />
         <Categories navigation={navigation}/>
-        <Text style={{fontSize: 20, fontWeight: 'bold', color: colors.text_color, padding: 10}}>Gợi ý cho bạn</Text>
+        <View style={{marginTop: 10, marginBottom: 20}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', color: colors.text_color, padding: 10}}>KHUYẾN MÃI</Text>
+          <ResPromotion navigation={navigation}/>
+        </View>
+        <Text style={{fontSize: 20, fontWeight: 'bold', color: colors.text_color, padding: 10}}>GỢI Ý CHO BẠN</Text>
         {
-          restaurants.map((item) => (
+          restaurants.length? ( restaurants.map((item) => (
             <ItemView key={item.id} item={item} navigation={navigation} />
-          ))
+          ))):(
+            <RestaurantSkeleton/>
+          )
         }
-        {/* <FlatList
-          data={restaurants}
-          renderItem={({item}) => (
-            <ItemView item={item} navigation={navigation} />
-          )}
-          keyExtractor={item => item.id}
-        /> */}
       </ScrollView>
     </View>
   );

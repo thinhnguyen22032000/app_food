@@ -1,11 +1,11 @@
-import {StyleSheet, Text, View, Image, Alert, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, Image, Alert, TouchableOpacity, ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {firestore} from '../../firebase/config';
 import {addData, deleteData} from '../../firebase/helpers';
-import ButtonCustom from '../../components/Button';
 import Loading from '../../components/Loading';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import RestaurantSkeleton from '../../components/RestaurantSkeleton';
+import { colors, shadowStyles } from '../../styleVariable';
 
 const RestaurantsPending = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -62,10 +62,10 @@ const RestaurantsPending = () => {
       <Image source={require('../../assets/empty.png')} />
     </View>
   ) : (
-    <View>
-      <View style={styles.list}>
+    <View style={styles.container}>
+      <ScrollView style={[styles.list]}>
         {restaurants.map(item => (
-          <View style={styles.item} key={item.id}>
+          <View style={[styles.item, shadowStyles.shadow]} key={item.id}>
             <Image style={styles.img} source={{uri: item.img}} />
             <Text>{item.name}</Text>
             <View style={styles.btnRight}>
@@ -78,7 +78,7 @@ const RestaurantsPending = () => {
             </View>
           </View>
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -87,7 +87,8 @@ export default RestaurantsPending;
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    flex: 1,
+    backgroundColor: colors.white_color
   },
   list: {
     margin: 20,
@@ -102,10 +103,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     margin: 2,
-    borderBottomColor: '#dbd9d5',
-    borderBottomWidth: 2,
-    marginBottom: 30,
-    marginBottom: 2
+    backgroundColor: colors.white_color,
+    marginBottom: 2,
+    padding: 10,
   },
   btnRight: {
     marginLeft: 'auto',

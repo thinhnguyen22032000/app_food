@@ -11,9 +11,9 @@ const Landing = ({navigation}) => {
   const [loading, setLoading] = useState(true)
 
   const nativeApiGetLocation = () => {
-    setLoading(true)
+    // setLoading(true)
     Geolocation.getCurrentPosition(position => {
-      setLoading(false)
+      // setLoading(false)
       setPosition({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -22,7 +22,11 @@ const Landing = ({navigation}) => {
     }, () => setLoading(false));
   }
   useEffect(() => {
-    nativeApiGetLocation()
+    let isMounted = true
+    if(isMounted){
+      nativeApiGetLocation()
+    }
+    return () => isMounted = false
   }, [])
   return (
     <View style={styles.container}>

@@ -1,5 +1,6 @@
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useContext, useEffect, useRef, useState} from 'react';
+import { Divider } from 'react-native-elements';
 import {center, colors, margin, padding, row} from '../../styleVariable';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -15,9 +16,11 @@ import {
 } from 'react-native-image-header-scroll-view';
 import Comments from '../../components/Comments';
 import * as Animatable from 'react-native-animatable';
+import MenuItem from '../../components/MenuItem';
+import DividerCustom from '../../components/DividerCustom';
 
 const RestaurantDetail = ({route, navigation}) => {
-  const {item} = route.params;
+  const {item, isPromotion} = route.params;
   const [liked, setLiked] = useState(false);
   let [likeCount, setLikeCount] = useState(item.like?.count || 0);
   const {userInfo} = useContext(UserContext);
@@ -108,7 +111,7 @@ const RestaurantDetail = ({route, navigation}) => {
         onHide={() => titleView.current.fadeInUp(200)}
         onDisplay={() => titleView.current.fadeOut(100)}>
         <View style={[styles.detailContainer]}>
-          <View style={styles.detailItem}>
+          <View style={[styles.detailItem, {justifyContent: 'space-between'}]}>
             <Text style={[styles.title, styles.mb]}>{item.name}</Text>
             <Text style={styles.price}>
               {' '}
@@ -126,27 +129,27 @@ const RestaurantDetail = ({route, navigation}) => {
             </View>
           </View>
           <View style={styles.detailItem}>
-            <View style={row}>
-              <Entypo name="location" size={20} />
-              <Text style={margin.ml4}>{distance} km</Text>
+            <View style={[row, {marginRight: 10}]}>
+              <Entypo name="location" size={20} color={colors.text_color} />
+              <Text style={[margin.ml4, styles.textItem]}>{distance} km</Text>
             </View>
             <View style={row}>
-              <FontAwesome name="motorcycle" size={18} />
-              <Text style={[padding.pr20, margin.ml4]}>{duration}h</Text>
+              <FontAwesome name="motorcycle" size={18} color={colors.text_color} />
+              <Text style={[margin.ml4, styles.textItem]}>{duration}h</Text>
             </View>
           </View>
           <View style={styles.detailItem}>
-            <View style={row}>
-              <Text style={margin.ml4}>
-                Mo cua luc: {item?.activeTime?.open || '7:00'}
+            <View style={[row, {marginRight: 10}]}>
+              <Text style={[margin.ml4, styles.textItem]}>
+               Mở cửa: {item?.activeTime?.open || '7:00'} h
               </Text>
             </View>
             <View style={row}>
-              <Text style={padding.pr20}>Mien phi giao hang trong 3km</Text>
+              <Text style={[margin.ml4, styles.textItem]}>Miễn phí giao hàng trong 2km</Text>
             </View>
           </View>
-          <View style={styles.detailItem}>
-            <View style={row}>
+          <View style={[styles.detailItem, {marginBottom: 20}]}>
+            <View style={[row, {marginRight: 10}]}>
               <TouchableOpacity onPress={handleUpdateLikeCount}>
                 {liked ? (
                   <AntDesign
@@ -158,10 +161,24 @@ const RestaurantDetail = ({route, navigation}) => {
                   <AntDesign name="hearto" size={20} />
                 )}
               </TouchableOpacity>
-              <Text style={margin.ml4}>{likeCount} luot thich</Text>
+              <Text style={[margin.ml4, styles.textItem]}>{likeCount} lượt thích</Text>
+            </View>
+            <View style={row}>
+               <Text onPress={() => navigation.navigate('Comment', {item: item})}
+                style={{marginRight: 20, color: colors.prymary_color, fontWeight: '700'}}
+                >Xem đánh giá {`(${item?.comments?.length || 0}+)`}</Text>
             </View>
           </View>
-          <Comments route={route} />
+          <DividerCustom/>
+          <View style={{marginLeft: 20}}>
+
+            {
+              item.menu && item.menu.map((menuItem, index)=>(
+                <MenuItem  key={index} item={menuItem} percent={item.promotion} />
+              ))
+            }
+          </View>
+          {/* <Comments route={route} /> */}
         </View>
       </TriggeringView>
     </ImageHeaderScrollView>
@@ -177,7 +194,7 @@ const styles = StyleSheet.create({
   },
   detailContainer: {
     flex: 1,
-    backgroundColor: colors.light_color,
+    // backgroundColor: colors.light_color,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingBottom: 20,
@@ -185,9 +202,8 @@ const styles = StyleSheet.create({
   detailItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingLeft: 20,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   price: {
     backgroundColor: colors.prymary_color,
@@ -214,6 +230,9 @@ const styles = StyleSheet.create({
   mb: {
     marginBottom: 10,
   },
+  textItem: {
+    color: colors.text_color
+  }
 });
 
 export default RestaurantDetail;

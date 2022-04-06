@@ -4,7 +4,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import { colors } from '../styleVariable';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
-const CurrentImagePicker = ({setImg, img, error}) => {
+const CurrentImagePicker = ({setImg, img, error, required}) => {
 
 const loadImage = () => {
     launchImageLibrary()
@@ -21,6 +21,7 @@ const loadImage = () => {
             <Image style={[styles.img, { alignSelf: 'center'}]} source={img} />
           ):(
             <View style={[styles.img, styles.imgContainer ]}>
+             <Text>Chọn ảnh {required?'(*)': null}</Text>
               {error && (<Text style={{color:colors.prymary_color}}>Vui lòng chọn ảnh</Text>)}
               <EvilIcons name='image' size={50}/>
             </View>

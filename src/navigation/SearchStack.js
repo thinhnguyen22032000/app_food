@@ -8,6 +8,7 @@ import HashTag from '../screens/HashTag';
 import SearchMain from '../screens/Search/SearchMain';
 import Landing from '../screens/Search/Landing';
 import Category from '../screens/Search/Category';
+import CommentView from '../screens/Search/CommentView';
 const Stack = createNativeStackNavigator();
 
 export default function SearchStack({navigation}) {
@@ -40,6 +41,7 @@ export default function SearchStack({navigation}) {
         component={SearchMain}
         options={{
           headerTitle: 'Tìm kiếm',
+          headerBackTitleVisible: false,
           headerShadowVisible: false,
         }}></Stack.Screen>
         <Stack.Screen
@@ -47,6 +49,14 @@ export default function SearchStack({navigation}) {
         component={Category}
         options={{
           headerTitle: '',
+          headerBackTitleVisible: false,
+          headerTransparent: true,
+        }}></Stack.Screen>
+         <Stack.Screen
+        name="Comment"
+        component={CommentView}
+        options={{
+          headerTitle: 'Đánh giá và nhận xét',
           headerBackTitleVisible: false,
           headerTransparent: true,
         }}></Stack.Screen>

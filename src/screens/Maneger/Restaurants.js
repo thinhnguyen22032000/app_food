@@ -1,9 +1,10 @@
-import {StyleSheet,  View} from 'react-native';
+import {StyleSheet,  View, ScrollView} from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import {firestore} from '../../firebase/config';
 import {UserContext} from '../../contexts/userContext';
 import RestaurantItem from '../../components/RestaurantItem';
 import RestaurantSkeleton from '../../components/RestaurantSkeleton';
+import { colors } from '../../styleVariable';
 
 
 const Restaurants = ({navigation}) => {
@@ -45,11 +46,11 @@ const Restaurants = ({navigation}) => {
   if(loading) return (<RestaurantSkeleton/>)
   return (
     <View style={styles.container}>
-      <View style={styles.list}>
+      <ScrollView style={styles.list}>
         {restaurants.map(item => (
          <RestaurantItem key={item.id} item={item} navigation={navigation}/>
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -58,9 +59,11 @@ export default Restaurants;
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20
+     backgroundColor: colors.white_color,
+     flex: 1,
+     
   },
   list: {
-     margin: 10
+     margin: 20
   },
 });

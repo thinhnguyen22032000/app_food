@@ -1,6 +1,8 @@
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {colors, shadowStyles} from '../styleVariable'
 
 const RestaurantItem = ({navigation, item}) => {
   const handleDetail = item => {
@@ -11,17 +13,27 @@ const RestaurantItem = ({navigation, item}) => {
     navigation.navigate('RestaurantUpdate', {item: item});
   };
 
+  const handleToMenu = item => {
+    navigation.navigate('Menu', {item: item});
+  }
+
   return (
-    <View style={styles.item}>
+    <View style={[styles.item, shadowStyles.shadow]}>
       <TouchableOpacity
         style={styles.itemContent}
         onPress={() => handleDetail(item)}>
         <Image style={styles.img} source={{uri: item.img}} />
         <Text>{item.name}</Text>
       </TouchableOpacity>
-      <Text onPress={() => handleEdit(item)} style={styles.arrow}>
+      <View style={styles.groupAction}>
+      <Text onPress={() => handleEdit(item)} style={{marginRight: 20}}>
         <IconAntDesign name="edit" size={20} color="#333" />
       </Text>
+      <Text onPress={() => handleToMenu(item)}>
+        <Entypo name="menu" size={20} color="#333" />
+      </Text>
+      </View>
+
     </View>
   );
 };
@@ -39,16 +51,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     margin: 2,
-    borderBottomColor: '#dbd9d5',
-    borderBottomWidth: 2,
+    // borderBottomColor: '#dbd9d5',
+    // borderBottomWidth: 2,
     marginBottom: 30,
-    marginBottom: 2
+    marginBottom: 2,
+    backgroundColor: colors.white_color,
+    padding: 10
   },
   itemContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  arrow: {
+  groupAction: {
     marginLeft: 'auto',
-  },
+    flexDirection: 'row'
+  }
 });

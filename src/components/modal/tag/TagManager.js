@@ -62,8 +62,8 @@ const TagManager = ({size}) => {
               errorMessage={err}
             />
             <View style={[row, styles.btnGroup]}>
-              <Text style={{padding: 10, fontSize: 16}} onPress={toggleModal}>Hủy</Text>
-              <Text style={{padding: 10, fontSize: 16}} onPress={handleCreateTag}>Lưu</Text>
+              <Text style={styles.btnModal} onPress={toggleModal}>Hủy</Text>
+              <Text style={styles.btnModal} onPress={handleCreateTag}>Lưu</Text>
             </View>
           </View>
         </Modal>
@@ -94,8 +94,10 @@ const styles = StyleSheet.create({
         color: colors.text_color
     },
     btnGroup: {
-        alignItems: 'center',
-        justifyContent: 'space-evenly'
+      margin: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-evenly',
     },
     icon: {
         marginRight: 10
@@ -106,5 +108,14 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 16,
       color: colors.text_color
-    }
+    },
+    btnModal: {
+      padding: 4,
+      fontSize: 16,
+      borderWidth: 1,
+      borderColor: 'gray',
+      minWidth: 60,
+      textAlign: 'center',
+      color: colors.text_color,
+    },
 })

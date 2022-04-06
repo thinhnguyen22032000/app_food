@@ -14,7 +14,10 @@ export const UserProvider = ({children}) => {
   const logout = () => {
     auth()
    .signOut()
-   .then(() => console.log('User signed out!'))
+   .then(() => {
+     setRestaurants([])
+     setUserInfo(null)
+   })
    .catch((err) => console.log(err))
   }
 

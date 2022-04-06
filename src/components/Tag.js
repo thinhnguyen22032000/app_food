@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import React from 'react';
-import {margin, tag} from '../styleVariable';
+import {colors, margin, tag} from '../styleVariable';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -34,7 +34,7 @@ const Tag = ({navigation, active, item, tagsActive, setTagsActive}) => {
   return (
     <Text
       onPress={handleProcess}
-      style={[margin.m2 ,tag.tag, active ? tag.tagActive : null]}>
+      style={[{color: colors.text_color},margin.m2 ,tag.tag, active ? tag.tagActive : null]}>
       <AntDesign name="tago" size={18} /> {item.tag} { active? (<Feather name='delete' size={18}/>):null}
     </Text>
   );

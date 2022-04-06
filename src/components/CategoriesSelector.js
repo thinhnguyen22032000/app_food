@@ -53,10 +53,10 @@ const CategoriesSelector = ({setCategory, category}) => {
     defaultButtonText='--Danh mục--'
     renderDropdownIcon={() => (<IconAntDesign name='down' size={12}/>)}
     buttonStyle={{
-        backgroundColor: "#eee",
+        backgroundColor: colors.white_color,
         height: 30,
         width: 200,
-        borderColor: colors.gray_color,
+        borderColor: colors.borderColor,
         borderWidth: 1,
         borderRadius: 4,
     }}

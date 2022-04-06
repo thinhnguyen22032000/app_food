@@ -13,6 +13,7 @@ import TimerSelect from '../../components/TimerSelect';
 import ButtonCustom from '../../components/Button'
 import CategoriesSelector from '../../components/CategoriesSelector';
 import OverlayCustom from '../../components/Overlay';
+import { Divider } from 'react-native-elements';
 
 export default function RestaurantUpdate({route, navigation}) {
 
@@ -96,8 +97,13 @@ export default function RestaurantUpdate({route, navigation}) {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={{margin: 10}}>
+      <Text style={{color: colors.text_color}}>{`(*) thông tin không thể trống`}</Text>
+      </View>
+      <Divider style={{marginBottom: 20}}/>
       <OverlayCustom loading={loading}/>
       <InputCustom
+        label={'Tên cửa hàng(*)'}
         placeholder="Tên cửa hàng"
         value={name}
         onChangeText={setName}
@@ -105,6 +111,8 @@ export default function RestaurantUpdate({route, navigation}) {
         errorMessage={err}
       />
       <InputCustom
+        label={'Tọa độ(*)'}
+        keyboardType='numeric'
         placeholder="lang"
         value={lang}
         onChangeText={setLang}
@@ -112,6 +120,8 @@ export default function RestaurantUpdate({route, navigation}) {
         errorMessage={err}
       />
       <InputCustom
+        label={'Tọa độ(*)'}
+        keyboardType='numeric'
         placeholder="lat"
         value={lat}
         onChangeText={setLat}
@@ -161,11 +171,14 @@ export default function RestaurantUpdate({route, navigation}) {
         )}
       </View>
       <View style={{marginTop: 10, marginBottom: 40}}>
-      <ButtonCustom
+     <View style={{flex: 1, alignItems: 'center'}}>
+     <ButtonCustom
         title={'Cập nhật'}
         bgColor={'#3241ed'}
         onPress={() => handleUpdate(item)}
+        width={'94%'}
       />
+     </View>
       </View>
     </ScrollView>
   );
@@ -173,12 +186,14 @@ export default function RestaurantUpdate({route, navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
     padding: 10,
+    backgroundColor: colors.white_color
   },
   imgWrap: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center'
   },
   img: {
     width: 120,
@@ -205,14 +220,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   imgContainer: {
-    flex: 1,
-    backgroundColor: colors.input_color,
-    padding: 10,
     borderColor: colors.text_color,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     borderStyle: 'dotted',
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
 });

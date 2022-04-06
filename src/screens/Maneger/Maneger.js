@@ -7,9 +7,9 @@ import {UserContext} from '../../contexts/userContext';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {sizeIcon, padding, colors} from '../../styleVariable';
-import ButtonCustom from '../../components/Button';
 import TagManager from '../../components/modal/tag/TagManager';
 import {firestore} from '../../firebase/config';
+import Logo from '../../share/Logo';
 
 export default function Maneger({navigation}) {
   const {userInfo, logout} = useContext(UserContext);
@@ -42,7 +42,8 @@ export default function Maneger({navigation}) {
   }, [])
 
   return (
-    <View>
+    <View style={styles.container}>
+      <Logo/>
       <View style={styles.header}>
         <Avatar
           source={require('../../assets/avatar.jpg')}
@@ -90,6 +91,10 @@ export default function Maneger({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#eee'
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
