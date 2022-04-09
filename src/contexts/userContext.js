@@ -17,6 +17,7 @@ export const UserProvider = ({children}) => {
    .then(() => {
      setRestaurants([])
      setUserInfo(null)
+     setPosition(null)
    })
    .catch((err) => console.log(err))
   }
@@ -48,12 +49,23 @@ export const UserProvider = ({children}) => {
       .catch(err => console.log(err))
   };
 
+  // useEffect(() => {
+  //   if(position){
+  //     loadRestaurants() 
+  //     console.log('res', restaurants)
+  //   }
+  // },[position])
+
   useEffect(() => {
-    if(position){
-      loadRestaurants() 
-      console.log('res', restaurants)
-    }
-  },[position])
+    const subscriber = firestore()
+    .collection('restaurants')
+    .onSnapshot(documentSnapshot => {
+      if(position){
+        loadRestaurants() 
+      }
+    })  
+    return () => subscriber() 
+  }, [position])
   // calc distance to user location
   const currentDistance = async (longitude, latitude) => {
       const str = calcDistancePositionString(

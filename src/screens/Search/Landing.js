@@ -7,7 +7,7 @@ import ButtonCustom from '../../components/Button';
 import { Overlay } from 'react-native-elements';
 
 const Landing = ({navigation}) => {
-  const {setPosition} = useContext(UserContext)
+  const {setPosition, position} = useContext(UserContext)
   const [loading, setLoading] = useState(true)
 
   const nativeApiGetLocation = () => {
@@ -21,6 +21,7 @@ const Landing = ({navigation}) => {
       
     }, () => setLoading(false));
   }
+  console.log(position)
   useEffect(() => {
     let isMounted = true
     if(isMounted){

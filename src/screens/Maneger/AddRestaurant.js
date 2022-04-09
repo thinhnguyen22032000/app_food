@@ -22,6 +22,7 @@ import Tag from '../../components/Tag';
 import TagItem from '../../components/modal/tag/TagItem';
 import ButtonCustom from '../../components/Button';
 import CategoriesSelector from '../../components/CategoriesSelector';
+import { showToast } from '../../toast';
 
 export default function AddRestaurant({navigation}) {
   const {userInfo} = useContext(UserContext);
@@ -76,7 +77,7 @@ export default function AddRestaurant({navigation}) {
   useEffect(() => {
     setTimeout(() => {
       if(isHandle){
-        navigation.goBack()
+        navigation.navigate('Restaurants')
         Alert.alert('Thông báo', 'Thêm thành công!. Đang trong danh sách chờ');
       }
     }, 1000)
@@ -84,10 +85,7 @@ export default function AddRestaurant({navigation}) {
 
   console.log(category)
   
-  const handlePopTag = item => {
-    const filterData = tagSelector.filter(tag => tag.id != item.id);
-    setTagSelector(filterData);
-  };
+
 
   const handleFocusInput = () => {
      setIsFocus(!isFocus)
@@ -139,13 +137,13 @@ export default function AddRestaurant({navigation}) {
         </View>
       </View>
       <View style={[styles.section, margin.mt20]}>
-        <View style={styles.tagsContainer}>
+        {/* <View style={styles.tagsContainer}>
           {tagSelector.map(item => (
             <TouchableOpacity key={item.id} onPress={() => handlePopTag(item)}>
               <TagItem active item={item} />
             </TouchableOpacity>
           ))}
-        </View>
+        </View> */}
         <TagSelector
           tagSelector={tagSelector}
           setTagSelector={setTagSelector}

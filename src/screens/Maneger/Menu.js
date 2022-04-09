@@ -1,42 +1,50 @@
-import { StyleSheet, Text, View , TouchableOpacity} from 'react-native'
-import React, {useState} from 'react'
+import {StyleSheet, Text, View, TouchableOpacity, ToastAndroid} from 'react-native';
+import React, {useState} from 'react';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import MenuModalAdd from '../../components/modal/menu/MenuModalAdd';
-import PromotionModal from '../../components/modal/menu/PromotionModal';
+import MenuModalAdd from '../../components/modal/menu/menu/MenuModalAdd';
+import PromotionModal from '../../components/modal/menu/promotion/PromotionModal';
+import {colors} from '../../styleVariable';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Toast from 'react-native-toast-message';
+import { Button } from 'react-native-elements';
 
+const Menu = ({route, navigation}) => {
+  const {item} = route.params;
 
-const Menu = ({route}) => {
-    const {item} = route.params
-    const [isModalVisible, setModalVisible] = useState(false);
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible);
-        };
   return (
     <View style={{padding: 20, flex: 1}}>
-       <TouchableOpacity onPress={toggleModal} style={styles.section}>
-          <Text style={styles.icon}><IconAntDesign name="left" size={18} color="#000" /></Text>
-          <Text style={styles.text}>Thêm thực đơn</Text>
-       </TouchableOpacity>
-       <MenuModalAdd isModalVisible={isModalVisible} setModalVisible={setModalVisible} toggleModal={toggleModal} item={item}/>
-      <PromotionModal item={item}/>
-  
+      <View>
+        <Text
+          style={{color: colors.text_color, fontSize: 18, fontWeight: 'bold'}}>
+          <Entypo name="shop" size={18} color={colors.text_color} /> {item.name}
+        </Text>
+      </View>
+      <Text>
+        Các chức năng giúp bạn quản lý cửa hàng tôt hơn.
+      </Text>
+      <View style={{marginTop: 20}}>
+        <View style={{marginBottom: 10}}>
+        <MenuModalAdd titleModal={'Thêm thực đơn'} lable={'Thêm thực đơn'} item={item} navigation={navigation} />
+        </View>
+        <View>
+        <PromotionModal titleModal={'Thêm khuyến mãi'} lable={'Thêm khuyến mãi'} navigation={navigation} item={item} />
+        </View>
+      </View>
     </View>
-    
-  )
-}
+  );
+};
 
-export default Menu
+export default Menu;
 
 const styles = StyleSheet.create({
-   section: {
-       flexDirection: 'row',
-       alignItems: 'center'
-   },
-   icon: {
-       marginRight: 20
-   },
-   text: {
-       fontSize: 20,
-       color: "#000"
-   }
-})
+  section: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: 20,
+  },
+  text: {
+    fontSize: 18,
+  },
+});

@@ -14,7 +14,7 @@ export const colors = {
     light_color: "#F1F1F1",
     yellow_color: "#c7c108",
     inputSearch_color: '#dbdad7',
-    blue_color: '#3241ed',
+    blue_color: '#2daee0',
     borderColor: "#c6c9cf"
     
 }

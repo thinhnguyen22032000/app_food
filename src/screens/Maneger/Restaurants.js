@@ -5,12 +5,14 @@ import {UserContext} from '../../contexts/userContext';
 import RestaurantItem from '../../components/RestaurantItem';
 import RestaurantSkeleton from '../../components/RestaurantSkeleton';
 import { colors } from '../../styleVariable';
+import Empty from '../../components/Empty';
 
 
 const Restaurants = ({navigation}) => {
   const [restaurants, setRestaurants] = useState([]);
   const {userInfo} = useContext(UserContext);
   const [loading, setLoading] = useState(true)
+  const [flag, setFlag] = useState(false);
   
   const loadData = () => {
     firestore()
@@ -30,6 +32,7 @@ const Restaurants = ({navigation}) => {
         }
       })
       setRestaurants(listFilter);
+      setFlag(true)
     });
   }
   useEffect(() => {
@@ -46,11 +49,18 @@ const Restaurants = ({navigation}) => {
   if(loading) return (<RestaurantSkeleton/>)
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.list}>
-        {restaurants.map(item => (
-         <RestaurantItem key={item.id} item={item} navigation={navigation}/>
-        ))}
-      </ScrollView>
+      {
+
+        restaurants && restaurants.length > 0? (
+          <ScrollView style={styles.list}>
+          {restaurants.map(item => (
+           <RestaurantItem key={item.id} item={item} navigation={navigation}/>
+          ))}
+        </ScrollView>
+        ):(
+          flag  && <Empty message={'Bạn không có cửa hàng nào'} />
+        )
+      }
     </View>
   );
 };
@@ -59,7 +69,7 @@ export default Restaurants;
 
 const styles = StyleSheet.create({
   container: {
-     backgroundColor: colors.white_color,
+    //  backgroundColor: colors.white_color,
      flex: 1,
      
   },

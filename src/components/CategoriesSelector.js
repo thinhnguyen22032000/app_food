@@ -10,6 +10,8 @@ const CategoriesSelector = ({setCategory, category}) => {
     const [index, setIndex] = useState(0)
 
     useEffect(() => {
+        let isMounted = true
+        if(isMounted) {
         firestore().collection('categories').get()
        .then(data => {
            const newData = []
@@ -20,15 +22,21 @@ const CategoriesSelector = ({setCategory, category}) => {
            setCategories(newData)
        })
        .catch(err => console.log(err))
+    }
+    return () => isMounted = false
     },[])
   console.log(categories)
   
   useEffect(() => {
-        const catValue = categories.map(item => {
-            return item.value
-        })
-        const index = catValue.indexOf(`${category}`)
-        setIndex(index)
+        let isMounted = true
+        if(isMounted) {
+            const catValue = categories.map(item => {
+                return item.value
+            })
+            const index = catValue.indexOf(`${category}`)
+            setIndex(index)
+        }
+        return () => isMounted = false
   }, [categories])
 
   return (

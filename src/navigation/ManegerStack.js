@@ -10,6 +10,8 @@ import RestaurantDetail from '../screens/Maneger/RestaurantDetail';
 import RestaurantUpdate from '../screens/Maneger/RestaurantUpdate';
 import OverView from '../screens/Maneger/OverView';
 import Menu from '../screens/Maneger/Menu';
+import Contact from '../screens/Maneger/Contact';
+import AdminContact from '../screens/Maneger/AdminContact';
 const Stack = createNativeStackNavigator();
 
 export default function ManegerStack() {
@@ -42,7 +44,7 @@ export default function ManegerStack() {
       <Stack.Screen
         name="RestaurantsPending"
         component={RestaurantsPending}
-        options={{title: 'Cửa hàng chờ', headerTitleAlign: "center", }}></Stack.Screen>
+        options={{title: 'Cửa hàng chờ', headerTitleAlign: "center",}}></Stack.Screen>
         <Stack.Screen
         name="OverView"
         component={OverView}
@@ -55,6 +57,14 @@ export default function ManegerStack() {
         name="Menu"
         component={Menu}
         options={{title: 'Menu', headerTitleAlign: "center",}}></Stack.Screen>
+         <Stack.Screen
+        name="Contact"
+        component={Contact}
+        options={{title: 'Liên hệ với chúng tôi', headerTitleAlign: "center",}}></Stack.Screen>
+          <Stack.Screen
+        name="AdminContact"
+        component={AdminContact}
+        options={{title: 'Liên hệ', headerTitleAlign: "center",}}></Stack.Screen>
     </Stack.Navigator>
   );
 }

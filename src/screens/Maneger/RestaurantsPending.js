@@ -6,6 +6,8 @@ import Loading from '../../components/Loading';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import RestaurantSkeleton from '../../components/RestaurantSkeleton';
 import { colors, shadowStyles } from '../../styleVariable';
+import {showToast} from '../../toast/index'
+import OverlayCustom from '../../components/Overlay';
 
 const RestaurantsPending = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -40,7 +42,7 @@ const RestaurantsPending = () => {
     Promise.all([pm1, pm2]).then(() => {
       getRestaurants();
       setLoading(false);
-      Alert.alert('Xu ly thanh cong');
+      showToast()
     });
   };
   const handleDeleteRes = item => {
@@ -48,12 +50,10 @@ const RestaurantsPending = () => {
     deleteData('storePending', item.id, item.img).then(() => {
       getRestaurants();
       setLoading(false);
-      Alert.alert('Xoa thanh cong');
+      showToast()
     });
   };
   console.log(restaurants);
-
-  if (loading) return <Loading />;
 
   if(loadData) return (<RestaurantSkeleton/>)
 
@@ -63,6 +63,7 @@ const RestaurantsPending = () => {
     </View>
   ) : (
     <View style={styles.container}>
+      <OverlayCustom loading={loading}/>
       <ScrollView style={[styles.list]}>
         {restaurants.map(item => (
           <View style={[styles.item, shadowStyles.shadow]} key={item.id}>
@@ -88,7 +89,6 @@ export default RestaurantsPending;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white_color
   },
   list: {
     margin: 20,

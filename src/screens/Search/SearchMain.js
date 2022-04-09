@@ -19,6 +19,7 @@ import ItemView from '../../components/ResFlatListItem';
 import { getData, setData } from '../../localStorage.js/storage';
 import Loading from '../../components/Loading';
 import HistoryItem from '../../components/HistoryItem';
+import Empty from '../../components/Empty';
 
 const SearchMain = ({navigation}) => {
   const {restaurants} = useContext(UserContext);
@@ -109,12 +110,7 @@ const SearchMain = ({navigation}) => {
         search !== ''? (
           <View style={styles.conItem}>
           {dataFilter.length === 0 && flag === true ? (
-            <View style={center}>
-              <Image
-                style={styles.imgSearch}
-                source={require('../../assets/notfound.jpg')}
-              />
-            </View>
+           <Empty/>
           ) : (
             <View style={{marginBottom: 100}}>
               <FlatList

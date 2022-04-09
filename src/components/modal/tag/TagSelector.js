@@ -1,17 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import SelectDropdown from 'react-native-select-dropdown'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import { colors, tag } from '../../../styleVariable'
 import { getData } from '../../../firebase/helpers'
 import { firestore } from '../../../firebase/config'
+import TagItem from './TagItem'
 
 
 const TagSelector = ({setTagSelector, tagSelector}) => {
+
     const [tags, setTags] = useState([])
     const [tagsFilter, setTagsFilter] = useState([])
 
-  useEffect(() => {
+  useEffect(() => { // get tags from db
       firestore().collection('tags').get()
      .then(data => {
          const newData = []
@@ -24,30 +26,45 @@ const TagSelector = ({setTagSelector, tagSelector}) => {
      .catch(err => console.log(err))
   },[])
 
-  
+  const handlePopTag = item => {  // delete tag 
+    const filterData = tagSelector.filter(tag => tag.id != item.id);
+    
+    setTagSelector(filterData);
+  };
 
+ 
+  // filter tags change
   useEffect(() => {
-    console.log('render-re')
-    console.log('tag select',tagSelector)
     let tagIdSelector = []
     tagSelector.forEach(tagSelector => {
       tagIdSelector.push(tagSelector.id)
     })
-    const data = tagsFilter.filter((item) => {
+    console.log('active tag: ', tagSelector)
+    console.log('tagIdSelector: ', tagIdSelector)
+    const data = tags.filter((item) => {
         if(!tagIdSelector.includes(item.id)){ // ko có id nào nằm trong tagIdSelector
+          console.log('da loc', tagIdSelector.includes(item.id))
             return item
         }
     })
     setTagsFilter(data)
+   
   }, [tagSelector])
-  console.log('tags:', tags)
 
-
+  console.log(tagsFilter)
   return (
+    <View style={styles.section}>
+    <View style={styles.tagsContainer}>
+    {tagSelector.map(item => (
+      <TouchableOpacity key={item.id} onPress={() => handlePopTag(item)}>
+        <TagItem active item={item} />
+      </TouchableOpacity>
+    ))}
+  </View>
     <SelectDropdown
 	data={tagsFilter}
 	onSelect={(selectedItem, index) => {
-        const newData = [...tagSelector]
+        const newData = [...tagSelector] // clone tags
         newData.push(selectedItem)
         setTagSelector(newData)
 	}}
@@ -78,9 +95,28 @@ const TagSelector = ({setTagSelector, tagSelector}) => {
         fontSize: 12
     }}
 />
+    </View>
   )
 }
 
 export default TagSelector
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  tagsContainer: {
+    flex: 1,
+    marginRight: 20,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    padding: 5,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  section: {
+    flex: 1,
+    flexDirection: 'row',
+    margin: 10,
+    // flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+})

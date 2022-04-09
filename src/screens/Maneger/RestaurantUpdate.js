@@ -14,6 +14,7 @@ import ButtonCustom from '../../components/Button'
 import CategoriesSelector from '../../components/CategoriesSelector';
 import OverlayCustom from '../../components/Overlay';
 import { Divider } from 'react-native-elements';
+import {showToast} from '../../toast/index'
 
 export default function RestaurantUpdate({route, navigation}) {
 
@@ -66,11 +67,12 @@ export default function RestaurantUpdate({route, navigation}) {
       .then(() => {
         setLoading(false);
         setIsHandle(true)
+        showToast()
       })
       .catch(err => {
         setLoading(false);
         console.log(err);
-        Alert.alert('Vui long dien du thong tin');
+        showToast('Có lỗi xảy ra vui lòng thử lại')
       });
 
     }else{
@@ -82,7 +84,10 @@ export default function RestaurantUpdate({route, navigation}) {
 
   useEffect(() => {
     setTimeout(() => {
-      if(isHandle) return navigation.navigate('Restaurants')
+
+      if(isHandle) {
+         navigation.navigate('Restaurants')
+      }
     }, 1000)
   }, [isHandle])
 
@@ -140,13 +145,13 @@ export default function RestaurantUpdate({route, navigation}) {
       </View>
      {/* select */}
       <View style={[styles.section, {marginBottom: 20}]}>
-        <View style={styles.tagsContainer}>
+        {/* <View style={styles.tagsContainer}>
           {tagSelector.map(item => (
             <TouchableOpacity key={item.id} onPress={() => handlePopTag(item)}>
               <TagItem active item={item} />
             </TouchableOpacity>
           ))}
-        </View>
+        </View> */}
         <TagSelector
           tagSelector={tagSelector}
           setTagSelector={setTagSelector}

@@ -23,10 +23,11 @@ export default MenuItem
 
 const styles = StyleSheet.create({
     item: {
-        flex: 1,
+        // flex: 1,
         flexDirection: 'row',
         // alignItems: 'center'
-        marginBottom: 20
+        marginBottom: 20,
+        backgroundColor: colors.white_color
     },
     name: {
       color: colors.text_color,

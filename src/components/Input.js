@@ -14,6 +14,7 @@ const InputCustom = ({
   label,
   secureTextEntry,
   keyboardType,
+  height
 
 }) => {
   const [isFocus, setIsFocus] = useState(false)
@@ -23,6 +24,7 @@ const InputCustom = ({
   const handleChangeFocus = () => {
     setIsFocus(!isFocus)
   }
+  const setHeight = height?height:40
   return (
       <Input
         label={label}
@@ -36,7 +38,7 @@ const InputCustom = ({
         leftIcon={leftIcon}
         errorMessage={errorMessage}
         inputContainerStyle={{
-          height: 40,
+          height: setHeight,
           paddingHorizontal: 16,
           width: width,
           borderWidth: 1,

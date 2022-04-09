@@ -13,7 +13,7 @@ import Logo from '../../share/Logo';
 
 export default function Maneger({navigation}) {
   const {userInfo, logout} = useContext(UserContext);
-  const [badge, setBadge] = useState(0)
+  const [badge, setBadge] = useState(0);
 
   const handleLogout = () => {
     Alert.alert(
@@ -26,24 +26,26 @@ export default function Maneger({navigation}) {
       {cancelable: false},
     );
   };
- 
+
   const loadBadge = () => {
-    firestore().collection('storePending').get()
-     .then(data => setBadge(data.size))
-     .catch(err => console.log(err))
-  }
+    firestore()
+      .collection('storePending')
+      .get()
+      .then(data => setBadge(data.size))
+      .catch(err => console.log(err));
+  };
   useEffect(() => {
     const subscriber = firestore()
-    .collection('storePending')
-    .onSnapshot(documentSnapshot => {
-      loadBadge()
-    })  
-    return () => subscriber() 
-  }, [])
+      .collection('storePending')
+      .onSnapshot(documentSnapshot => {
+        loadBadge();
+      });
+    return () => subscriber();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Logo/>
+      <Logo />
       <View style={styles.header}>
         <Avatar
           source={require('../../assets/avatar.jpg')}
@@ -55,8 +57,9 @@ export default function Maneger({navigation}) {
           <Text>{userInfo.email}</Text>
           <Text
             onPress={handleLogout}
-            style={[padding.p6,{fontSize: 16, color: colors.text_color}]}
-          >Đăng xuất</Text>
+            style={[padding.p6, {fontSize: 16, color: colors.text_color}]}>
+            Đăng xuất
+          </Text>
         </View>
       </View>
       <View style={styles.content}>
@@ -64,28 +67,73 @@ export default function Maneger({navigation}) {
           navigation={navigation}
           title="Cửa hàng của tôi"
           page="Restaurants"
-          icon={<Ionicons name="restaurant-outline" size={sizeIcon.ICON_MANEGER} color="#333" />}
+          icon={
+            <Ionicons
+              name="restaurant-outline"
+              size={sizeIcon.ICON_MANEGER}
+              color="#333"
+            />
+          }
         />
         <ManegerItem
           navigation={navigation}
           title="Thêm cửa hàng"
           page="AddRestaurant"
-          icon={<IconAntDesign name="pluscircleo" size={sizeIcon.ICON_MANEGER} color="#333" />}
+          icon={
+            <IconAntDesign
+              name="pluscircleo"
+              size={sizeIcon.ICON_MANEGER}
+              color="#333"
+            />
+          }
+        />
+        <ManegerItem
+          navigation={navigation}
+          title="Liên hệ với chúng tôi"
+          page="Contact"
+          icon={
+            <IconAntDesign
+              name="phone"
+              size={sizeIcon.ICON_MANEGER}
+              color="#333"
+            />
+          }
         />
         {userInfo.uid == ID_ADMIN && (
-          <ManegerItem
-            navigation={navigation}
-            title="Cửa hàng chờ"
-            page="RestaurantsPending"
-            icon={<IconAntDesign name="inbox" size={sizeIcon.ICON_MANEGER} color="#333" />}
-            badge={badge}
-          />
+          <View>
+            <ManegerItem
+              navigation={navigation}
+              title="Cửa hàng chờ"
+              page="RestaurantsPending"
+              icon={
+                <IconAntDesign
+                  name="inbox"
+                  size={sizeIcon.ICON_MANEGER}
+                  color="#333"
+                />
+              }
+              badge={badge}
+            />
+             <ManegerItem
+          navigation={navigation}
+          title="Liên hệ"
+          page="AdminContact"
+          icon={
+            <IconAntDesign
+              name="phone"
+              size={sizeIcon.ICON_MANEGER}
+              color="#333"
+            />
+          }
+        />
+          </View>
         )}
-       {/* modal */}
-        <TagManager size={sizeIcon.ICON_MANEGER}/>
-       
-
+        {/* modal */}
+        <TagManager size={sizeIcon.ICON_MANEGER} />
       </View>
+      <Text style={{marginTop: 'auto', padding: 10}}>
+        Phiên bản hiện tại 1.00
+      </Text>
     </View>
   );
 }
@@ -93,12 +141,13 @@ export default function Maneger({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eee'
+    backgroundColor: colors.white_color
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     margin: 10,
+   
   },
   content: {
     backgroundColor: '#fff',

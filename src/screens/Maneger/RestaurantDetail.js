@@ -14,7 +14,6 @@ import {
   ImageHeaderScrollView,
   TriggeringView,
 } from 'react-native-image-header-scroll-view';
-import Comments from '../../components/Comments';
 import * as Animatable from 'react-native-animatable';
 import MenuItem from '../../components/MenuItem';
 import DividerCustom from '../../components/DividerCustom';
@@ -26,6 +25,8 @@ const RestaurantDetail = ({route, navigation}) => {
   const {userInfo} = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const titleView = useRef(null);
+  const isLikeRef = useRef(liked)
+  const likeTimeRef = useRef(null)
 
   useEffect(() => {
     if (item?.like?.uids) {
@@ -38,6 +39,22 @@ const RestaurantDetail = ({route, navigation}) => {
 
   useEffect(() => setLoading(false), []);
 
+  function handleCount(item, newUids, isLikeRef, increase=null){
+    likeCount = increase? ++likeCount: --likeCount
+    firestore()
+    .collection('restaurants')
+    .doc(item.id)
+    .update({
+      like: {count: likeCount, uids: newUids},
+    })
+    .then(() => {
+      setLiked(isLikeRef);
+      setLikeCount(prev => {
+        return prev = increase? prev + 1: prev - 1
+      });
+    });
+  }
+
   const handleUpdateLikeCount = () => {
     let arr;
     if (item?.like?.uids) {
@@ -45,33 +62,49 @@ const RestaurantDetail = ({route, navigation}) => {
     } else {
       arr = [];
     }
-    if (liked == false) {
-      arr.filter(item => item != userInfo.uid);
-      arr.push(userInfo.uid);
-      firestore()
-        .collection('restaurants')
-        .doc(item.id)
-        .update({
-          like: {count: ++likeCount, uids: [...arr]},
-        })
-        .then(() => {
-          setLiked(true);
-          setLikeCount(prev => prev + 1);
-        });
-      console.log('mang: ', arr);
+    if (liked === false) {
+      if(likeTimeRef.current) {
+        clearTimeout(likeTimeRef.current)
+      }
+      setLiked(true)
+      isLikeRef.current = true
+      likeTimeRef.current = setTimeout(() => {
+        arr.filter(item => item != userInfo.uid);
+        arr.push(userInfo.uid);
+        let increase = true
+        handleCount(item, arr, increase, isLikeRef.current)
+      }, 2000)
+      // firestore()
+      //   .collection('restaurants')
+      //   .doc(item.id)
+      //   .update({
+      //     like: {count: ++likeCount, uids: [...arr]},
+      //   })
+      //   .then(() => {
+      //     setLiked(true);
+      //     setLikeCount(prev => prev + 1);
+      //   });
+      // console.log('mang: ', arr);
     } else {
-      const newUids = arr.filter(item => item != userInfo.uid);
-      console.log(newUids);
-      firestore()
-        .collection('restaurants')
-        .doc(item.id)
-        .update({
-          like: {count: --likeCount, uids: newUids},
-        })
-        .then(() => {
-          setLiked(false);
-          setLikeCount(prev => prev - 1);
-        });
+      if(likeTimeRef.current) {
+        clearTimeout(likeTimeRef.current)
+      }
+      setLiked(false)
+      isLikeRef.current = false
+      likeTimeRef.current = setTimeout(() => {
+        const newUids = arr.filter(item => item != userInfo.uid);
+        handleCount(item, newUids, isLikeRef.current)
+      }, 2000)
+      // firestore()
+      //   .collection('restaurants')
+      //   .doc(item.id)
+      //   .update({
+      //     like: {count: --likeCount, uids: newUids},
+      //   })
+      //   .then(() => {
+      //     setLiked(false);
+      //     setLikeCount(prev => prev - 1);
+      //   });
     }
   };
   const distance = distanceCalc(item.distance, 1);
@@ -97,18 +130,19 @@ const RestaurantDetail = ({route, navigation}) => {
       )}
       // renderForeground={() => (
       //   <View style={[center, {flex: 1}]}>
-      //     <Text style={[styles.title]}>{item.name}</Text>
+      //     <Text style={{color: '#fff'}}>hihi</Text>
       //   </View>
       // )}
-      // renderFixedForeground={() => (
-      //   <Animatable.View style={[styles.titleView]} ref={titleView}>
-      //     <Text style={[styles.title]}>kakaka</Text>
-      //   </Animatable.View>
-      // )}
+      renderFixedForeground={() => (
+        <Animatable.View style={[styles.titleView]} ref={titleView}>
+          <Text style={{color: '#fff'}}>i have confirmed</Text>
+        </Animatable.View>
+        //  <Text ref={titleView} style={{color: '#fff', height: 55, opacity: 0,}}>kakaka</Text>
+      )}
       >
       <TriggeringView
         style={styles.container}
-        onHide={() => titleView.current.fadeInUp(200)}
+        onHide={()    => titleView.current.fadeInUp(200)}
         onDisplay={() => titleView.current.fadeOut(100)}>
         <View style={[styles.detailContainer]}>
           <View style={[styles.detailItem, {justifyContent: 'space-between'}]}>
@@ -217,7 +251,7 @@ const styles = StyleSheet.create({
     color: colors.text_color,
   },
   titleView: {
-    height: 55,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 16,

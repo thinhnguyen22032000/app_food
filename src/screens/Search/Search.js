@@ -20,10 +20,14 @@ import ResPromotion from '../../share/ResPromotion';
 
 export default function Search({navigation}) {
   const {position, setPosition, restaurants} = useContext(UserContext);
+  const [data, setData] = useState([])
   const [positionName, setPositionName] = useState();
   const [loading, setLoading] = useState(true)
   
-  console.log('có rong ko: ', restaurants);
+  useEffect(() => {
+    let data = restaurants.sort((a, b) => a.distance - b.distance);
+    setData(data)
+  }, [restaurants])
 
   return (
     <View style={[container]}>
@@ -43,11 +47,16 @@ export default function Search({navigation}) {
         <Categories navigation={navigation}/>
         <View style={{marginTop: 10, marginBottom: 20}}>
           <Text style={{fontSize: 20, fontWeight: 'bold', color: colors.text_color, padding: 10}}>KHUYẾN MÃI</Text>
-          <ResPromotion navigation={navigation}/>
+          {
+            restaurants.length? (<ResPromotion navigation={navigation}/>):(
+                <View style={{width: '100%', height: 120, backgroundColor: '#ddd'}}></View>
+            )
+          }
+        
         </View>
         <Text style={{fontSize: 20, fontWeight: 'bold', color: colors.text_color, padding: 10}}>GỢI Ý CHO BẠN</Text>
         {
-          restaurants.length? ( restaurants.map((item) => (
+          restaurants.length? ( data.map((item) => (
             <ItemView key={item.id} item={item} navigation={navigation} />
           ))):(
             <RestaurantSkeleton/>

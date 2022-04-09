@@ -8,12 +8,14 @@ const promotions = ['0','10', '20', '30', '40', '50', '60', '70','80','90' ]
 
 const PromotionSelector = ({defaulText, setPromotion}) => {
 
+ 
 
+ console.log('re-red')
   return (
     <SelectDropdown
 	data={promotions}
 	onSelect={(selectedItem, index) => {
-       setPromotion(selectedItem)
+      setPromotion(selectedItem)
 	}}
 	buttonTextAfterSelection={(selectedItem, index) => {
 		// text represented after item is selected
