@@ -7,6 +7,8 @@ import {auth} from '../firebase/config';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import { colors } from '../styleVariable';
 import SearchStack from './SearchStack';
+import NotifyStack from './NotifyStack'
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +22,7 @@ export default function Tabs() {
     console.log('user re-render: ' + userInfo);
     if (initializing) setInitializing(false);
   }
-
+ 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
@@ -43,6 +45,16 @@ export default function Tabs() {
         options={{
           tabBarLabel: '',
           tabBarIcon: ({focused}) => <IconAntDesign  name="search1" size={30}  style={{color: focused?colors.prymary_color:'gray'}} />,
+        }}
+      />
+       <Tab.Screen
+        name="NotifyStack"
+        component={NotifyStack}
+        options={{
+          tabBarLabel: '',
+          tabBarIcon: ({focused}) => (
+            <IconAntDesign name="bells" size={30}  style={{color: focused?colors.prymary_color:'gray'}} />
+          ),
         }}
       />
       <Tab.Screen

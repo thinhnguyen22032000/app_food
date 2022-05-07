@@ -12,23 +12,25 @@ const ItemView = ({vertical, promotion ,navigation, item, stogare, setHistory}) 
   const [searchHistory, setSearchHistory] = useState([])
   
   let container = vertical? {flexDirection: 'column'}:{ flexDirection: 'row'}
-  useEffect(() => {
-    let isMounted = true;
-      getData()
-      .then(data => {
-        if(isMounted ){
-        setSearchHistory(data)
-        }
-      })
-
-      return () => {
-        isMounted = false;
-      };
+  
+    useEffect(() => {
+      let isMounted = true
+      if(stogare){
+          getData()
+          .then(data => {
+            if(isMounted){
+            if(!data) setSearchHistory([])
+            else setSearchHistory(data)
+            }   
+          })
+      }
+      return () => isMounted = false
   }, [])
-  console.log(searchHistory)
+  
+  console.log('history: ', searchHistory)
   const handelToDetail = item => {
     if(stogare){
-      const find = searchHistory.find(data => data.id == item.id)
+      const find = searchHistory?.find(data => data.id == item.id)
       if(!find){
         searchHistory.push(item)
         setData(searchHistory)
@@ -56,7 +58,7 @@ const ItemView = ({vertical, promotion ,navigation, item, stogare, setHistory}) 
        <Text style={styles.itemTitle}><AntDesign name='checkcircle' size={16} color={colors.prymary_color}/> {item.name}</Text>
       </View>
       <View style={[row]}>
-       <Text>{`Khuyến mãi ${item.promotion}%`}</Text>
+       <Text>{`Khuyến mãi ${item.promotion.promotion || item.promotion}%`}</Text>
       </View>
     </TouchableOpacity>
   )
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
     img: {
       width: 80,
       height: 80,
-      backgroundColor: colors.gray_color,
+      backgroundColor: "#ddd",
       marginLeft: 'auto',
       borderRadius: 10
     },

@@ -18,8 +18,8 @@ export default function Position({positionName, setPositionName}) {
           axios
             .get(str)
             .then(data => {
-              console.log(data)
-              console.log(data.data.features[0].place_name);
+              console.log('position: ',data)
+              // console.log(data.data.features[0].place_name);
               setPositionName(data.data.features[0].place_name);
             })
             .catch(err => console.log('err ', err));
@@ -30,7 +30,7 @@ export default function Position({positionName, setPositionName}) {
         <View style={styles.header}>
         <Entypo style={styles.headerIcon} name="location-pin" size={20} />
         <Text style={styles.headerText}>
-          {positionName ? positionName : 'Dang tim vi tri....'}
+          {positionName ? positionName : 'Đang xác định vị trí....'}
         </Text>
       </View>
     )

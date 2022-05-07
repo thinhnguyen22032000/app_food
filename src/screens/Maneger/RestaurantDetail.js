@@ -1,6 +1,5 @@
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import { Divider } from 'react-native-elements';
 import {center, colors, margin, padding, row} from '../../styleVariable';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -17,6 +16,8 @@ import {
 import * as Animatable from 'react-native-animatable';
 import MenuItem from '../../components/MenuItem';
 import DividerCustom from '../../components/DividerCustom';
+import { msToHMS } from '../../helpers';
+import {updateData} from '../../firebase/helpers'
 
 const RestaurantDetail = ({route, navigation}) => {
   const {item, isPromotion} = route.params;
@@ -25,8 +26,31 @@ const RestaurantDetail = ({route, navigation}) => {
   const {userInfo} = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const titleView = useRef(null);
-  const isLikeRef = useRef(liked)
-  const likeTimeRef = useRef(null)
+  const isLikeRef = useRef(liked);
+  const likeTimeRef = useRef(null);
+  const [timeExpire, setTimeExpire] = useState(null)
+
+  useEffect(() => {
+    if(item?.promotion?.date_expire){
+      const timerId = setInterval(() => {
+        let currentDate = Date.parse(new Date());
+        let expireDate = item.promotion.date_expire.toMillis();
+        let result = expireDate - currentDate;
+        let m = new Date(result);
+        console.log('kq: ',result)
+        setTimeExpire(msToHMS(m));
+        if(result <= 0){
+          // clearInterval(intervalRef.current)
+          clearInterval(timerId)
+          setTimeExpire('Hết khuyến mãi')
+          updateData('restaurants',item.id, {promotion: {promotion: '0', date_expire: null}})
+          console.log('update khuyen mai')
+        }
+      }, 1000);
+      return () => clearInterval(timerId)
+    }
+   }, []);
+
 
   useEffect(() => {
     if (item?.like?.uids) {
@@ -39,20 +63,20 @@ const RestaurantDetail = ({route, navigation}) => {
 
   useEffect(() => setLoading(false), []);
 
-  function handleCount(item, newUids, isLikeRef, increase=null){
-    likeCount = increase? ++likeCount: --likeCount
+  function handleCount(item, newUids, isLikeRef, increase = null) {
+    likeCount = increase ? ++likeCount : --likeCount;
     firestore()
-    .collection('restaurants')
-    .doc(item.id)
-    .update({
-      like: {count: likeCount, uids: newUids},
-    })
-    .then(() => {
-      setLiked(isLikeRef);
-      setLikeCount(prev => {
-        return prev = increase? prev + 1: prev - 1
+      .collection('restaurants')
+      .doc(item.id)
+      .update({
+        like: {count: likeCount, uids: newUids},
+      })
+      .then(() => {
+        setLiked(isLikeRef);
+        setLikeCount(prev => {
+          return (prev = increase ? prev + 1 : prev - 1);
+        });
       });
-    });
   }
 
   const handleUpdateLikeCount = () => {
@@ -63,17 +87,18 @@ const RestaurantDetail = ({route, navigation}) => {
       arr = [];
     }
     if (liked === false) {
-      if(likeTimeRef.current) {
-        clearTimeout(likeTimeRef.current)
+      if (likeTimeRef.current) {
+        clearTimeout(likeTimeRef.current);
       }
-      setLiked(true)
-      isLikeRef.current = true
+      setLiked(true);
+      isLikeRef.current = true;
       likeTimeRef.current = setTimeout(() => {
-        arr.filter(item => item != userInfo.uid);
-        arr.push(userInfo.uid);
-        let increase = true
-        handleCount(item, arr, increase, isLikeRef.current)
-      }, 2000)
+        const newArr = arr.filter(item => item != userInfo.uid);
+        console.log('arr',arr)
+        newArr.push(userInfo.uid);
+        let increase = true;
+        handleCount(item, newArr, increase, isLikeRef.current);
+      }, 1500);
       // firestore()
       //   .collection('restaurants')
       //   .doc(item.id)
@@ -86,15 +111,15 @@ const RestaurantDetail = ({route, navigation}) => {
       //   });
       // console.log('mang: ', arr);
     } else {
-      if(likeTimeRef.current) {
-        clearTimeout(likeTimeRef.current)
+      if (likeTimeRef.current) {
+        clearTimeout(likeTimeRef.current);
       }
-      setLiked(false)
-      isLikeRef.current = false
+      setLiked(false);
+      isLikeRef.current = false;
       likeTimeRef.current = setTimeout(() => {
         const newUids = arr.filter(item => item != userInfo.uid);
-        handleCount(item, newUids, isLikeRef.current)
-      }, 2000)
+        handleCount(item, newUids, isLikeRef.current);
+      }, 1500);
       // firestore()
       //   .collection('restaurants')
       //   .doc(item.id)
@@ -138,28 +163,30 @@ const RestaurantDetail = ({route, navigation}) => {
           <Text style={{color: '#fff'}}>i have confirmed</Text>
         </Animatable.View>
         //  <Text ref={titleView} style={{color: '#fff', height: 55, opacity: 0,}}>kakaka</Text>
-      )}
-      >
+      )}>
       <TriggeringView
         style={styles.container}
-        onHide={()    => titleView.current.fadeInUp(200)}
+        onHide={() => titleView.current.fadeInUp(200)}
         onDisplay={() => titleView.current.fadeOut(100)}>
         <View style={[styles.detailContainer]}>
           <View style={[styles.detailItem, {justifyContent: 'space-between'}]}>
             <Text style={[styles.title, styles.mb]}>{item.name}</Text>
             <Text style={styles.price}>
               {' '}
-              <AntDesign name='checkcircle' size={16}/> Đối tác của spFood
+              <AntDesign name="checkcircle" size={16} /> Đối tác của spFood
             </Text>
+          </View>
+          <View style={[styles.detailItem, {justifyContent: 'space-between'}]}>
+            <Text style={{}}>Thời gian khuyến mãi: {timeExpire || '----'}</Text>
           </View>
           <View style={[styles.detailItem, row, margin.mr20]}>
             {/* <Tag navigation={navigation} item={{id:'lEDDAdvasI9dDv66k6mD',tag: 'trasua'}}/> */}
             <View style={{flexDirection: 'row'}}>
-            {item.tags
-              ? item.tags.map(item => (
-                  <Tag key={item.id} navigation={navigation} item={item} /> // item = {id: 'blala, 'tag: 'trasua'}
-                ))
-              : null}
+              {item.tags
+                ? item.tags.map(item => (
+                    <Tag key={item.id} navigation={navigation} item={item} /> // item = {id: 'blala, 'tag: 'trasua'}
+                  ))
+                : null}
             </View>
           </View>
           <View style={styles.detailItem}>
@@ -168,18 +195,24 @@ const RestaurantDetail = ({route, navigation}) => {
               <Text style={[margin.ml4, styles.textItem]}>{distance} km</Text>
             </View>
             <View style={row}>
-              <FontAwesome name="motorcycle" size={18} color={colors.text_color} />
+              <FontAwesome
+                name="motorcycle"
+                size={18}
+                color={colors.text_color}
+              />
               <Text style={[margin.ml4, styles.textItem]}>{duration}h</Text>
             </View>
           </View>
           <View style={styles.detailItem}>
             <View style={[row, {marginRight: 10}]}>
               <Text style={[margin.ml4, styles.textItem]}>
-               Mở cửa: {item?.activeTime?.open || '7:00'} h
+                Mở cửa: {item?.activeTime?.open || '7:00'} h
               </Text>
             </View>
             <View style={row}>
-              <Text style={[margin.ml4, styles.textItem]}>Miễn phí giao hàng trong 2km</Text>
+              <Text style={[margin.ml4, styles.textItem]}>
+                Miễn phí giao hàng trong 2km
+              </Text>
             </View>
           </View>
           <View style={[styles.detailItem, {marginBottom: 20}]}>
@@ -195,22 +228,34 @@ const RestaurantDetail = ({route, navigation}) => {
                   <AntDesign name="hearto" size={20} />
                 )}
               </TouchableOpacity>
-              <Text style={[margin.ml4, styles.textItem]}>{likeCount} lượt thích</Text>
+              <Text style={[margin.ml4, styles.textItem]}>
+                {likeCount} lượt thích
+              </Text>
             </View>
             <View style={row}>
-               <Text onPress={() => navigation.navigate('Comment', {item: item})}
-                style={{marginRight: 20, color: colors.prymary_color, fontWeight: '700'}}
-                >Xem đánh giá {`(${item?.comments?.length || 0}+)`}</Text>
+              <Text
+                onPress={() => navigation.navigate('Comment', {item: item})}
+                style={{
+                  marginRight: 20,
+                  color: colors.prymary_color,
+                  fontWeight: '700',
+                }}>
+                Xem đánh giá {`(${item?.comments?.length || 0}+)`}
+              </Text>
             </View>
           </View>
-          <DividerCustom/>
+          <DividerCustom />
           <View style={{marginLeft: 20}}>
-
-            {
-              item.menu && item.menu.map((menuItem, index)=>(
-                <MenuItem  key={index} item={menuItem} percent={item.promotion} />
-              ))
-            }
+            {item.menu &&
+              item.menu.map((menuItem, index) => (
+                <MenuItem
+                  idStore={item.id}
+                  navigation={navigation}
+                  key={index}
+                  item={menuItem}
+                  percent={item?.promotion?.promotion || null}
+                />
+              ))}
           </View>
           {/* <Comments route={route} /> */}
         </View>
@@ -220,9 +265,7 @@ const RestaurantDetail = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-   
-  },
+  container: {},
   header: {
     alignItems: 'center',
   },
@@ -265,8 +308,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textItem: {
-    color: colors.text_color
-  }
+    color: colors.text_color,
+  },
 });
 
 export default RestaurantDetail;

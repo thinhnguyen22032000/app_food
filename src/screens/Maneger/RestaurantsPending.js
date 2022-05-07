@@ -36,22 +36,42 @@ const RestaurantsPending = () => {
   }, []);
   //   handle admin process stores
   const handleProcessRes = item => {
-    setLoading(true);
-    const pm1 = addData('restaurants', item);
-    const pm2 = deleteData('storePending', item.id);
-    Promise.all([pm1, pm2]).then(() => {
-      getRestaurants();
-      setLoading(false);
-      showToast()
-    });
+    Alert.alert(
+      'Thông báo',
+      'Bạn thực sự muốn duyệt cửa hàng?', // <- this part is optional, you can pass an empty string
+      [
+        {text: 'Hủy', onPress: () => console.log('OK Pressed')},
+        {text: 'Duyệt', onPress: () => {
+          setLoading(true);
+          const pm1 = addData('restaurants', item);
+          const pm2 = deleteData('storePending', item.id);
+          Promise.all([pm1, pm2]).then(() => {
+            getRestaurants();
+            setLoading(false);
+            showToast()
+          });
+        }},
+      ],
+      {cancelable: false},
+    );
   };
   const handleDeleteRes = item => {
-    setLoading(true);
-    deleteData('storePending', item.id, item.img).then(() => {
-      getRestaurants();
-      setLoading(false);
-      showToast()
-    });
+    Alert.alert(
+      'Thông báo',
+      'Bạn thực sự muốn hủy cửa hàng?', // <- this part is optional, you can pass an empty string
+      [
+        {text: 'Hủy', onPress: () => console.log('OK Pressed')},
+        {text: 'Đồng ý', onPress: () => {
+          setLoading(true);
+          deleteData('storePending', item.id, item.img).then(() => {
+            getRestaurants();
+            setLoading(false);
+            showToast()
+          });
+        }},
+      ],
+      {cancelable: false},
+    );
   };
   console.log(restaurants);
 
@@ -67,8 +87,13 @@ const RestaurantsPending = () => {
       <ScrollView style={[styles.list]}>
         {restaurants.map(item => (
           <View style={[styles.item, shadowStyles.shadow]} key={item.id}>
-            <Image style={styles.img} source={{uri: item.img}} />
-            <Text>{item.name}</Text>
+            <View >
+            <Text style={{color: colors.text_color}}>{item.name}</Text>
+            <Text>{item?.date_release || '----'}</Text>
+            <Text>Mã số: {item.id || '----'}</Text>
+            <Text>Chủ cửa hàng: {item.user.email}</Text>
+            </View>
+
             <View style={styles.btnRight}>
               <TouchableOpacity onPress={() => handleDeleteRes(item)} style={styles.btnItem}>
                 <IconAntDesign name="delete" size={20} color="#333" />
@@ -91,13 +116,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   list: {
-    margin: 20,
+    margin: 10,
   },
   img: {
     width: 50,
     height: 50,
     borderRadius: 50,
     marginRight: 10,
+    backgroundColor: '#ddd'
   },
   item: {
     flexDirection: 'row',

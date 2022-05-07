@@ -4,15 +4,15 @@ import Carousel from 'react-native-snap-carousel';
 
 const carouselItems = [
     {
-        source: require('../assets/banner/banner1.jpg'),
+        source: require('../assets/banner/banner8.jpg'),
         text: "Text 1",
     },
     {
-        source: require('../assets/banner/banner2.jpg'),
+        source: require('../assets/banner/banner9.jpg'),
         text: "Text 2",
     },
     {
-        source: require('../assets/banner/banner3.jpg'),
+        source: require('../assets/banner/banner7.jpg'),
         text: "Text 2",
     },
    

@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
 import Modal from 'react-native-modal';
 import {colors} from '../../styleVariable';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -13,12 +13,16 @@ const ModalBase = ({titleModal,
     desc,
     children,
     showModal,
-    hide
+    hide,
+    size,
+    btn_2
   }) => {
+
+  const hDefoult = size?size: 400
   return (
     <View>
      {!hide?(
-        <TouchableOpacity onPress={toggleModal} style={styles.section}>
+        <Text onPress={toggleModal} style={styles.section}>
         <Text style={styles.icon}>
           <IconAntDesign name="plus" size={18} />
         </Text>
@@ -26,13 +30,12 @@ const ModalBase = ({titleModal,
           {lable} {desc && desc != 0 ? `(khuyễn mãi ${desc}%)` : null}{' '}
           {badge ? (<Text onPress={showModal} style={{color: colors.blue_color}}>{`Hiện thị (${badge})`}</Text>) : null}
         </Text>
-      </TouchableOpacity>
+      </Text>
      ):(
        null
      )}
       <Modal  isVisible={isModalVisible}>
-       
-        <View style={[styles.modalContainer, { flex: 1, maxHeight: 400}]}>
+        <View style={[styles.modalContainer, { flex: 1, maxHeight: hDefoult}]}>
           <View style={styles.header}>
             <Text style={styles.title}>{titleModal}</Text>
           </View>
@@ -43,6 +46,13 @@ const ModalBase = ({titleModal,
             </Text>
             {
               hide?(null):(
+                <Text style={styles.btnModal} onPress={funcHandle}>
+                Lưu
+              </Text>
+              )
+            }
+             {
+              !btn_2?(null):(
                 <Text style={styles.btnModal} onPress={funcHandle}>
                 Lưu
               </Text>

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, BackHandler } from 'react-native'
+import { StyleSheet, Text, View, BackHandler, Platform, PermissionsAndroid } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../contexts/userContext'
 import Geolocation from 'react-native-geolocation-service';
@@ -10,16 +10,30 @@ const Landing = ({navigation}) => {
   const {setPosition, position} = useContext(UserContext)
   const [loading, setLoading] = useState(true)
 
-  const nativeApiGetLocation = () => {
+  const nativeApiGetLocation = async () => {
     // setLoading(true)
-    Geolocation.getCurrentPosition(position => {
-      // setLoading(false)
-      setPosition({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
+    // console.log('lat gps')
+    // Geolocation.getCurrentPosition(position => {
+    //   // setLoading(false)
+    //   setPosition({
+    //     latitude: position.coords.latitude,
+    //     longitude: position.coords.longitude,
+    //   });
       
-    }, () => setLoading(false));
+    // }, () => setLoading(false));
+    Geolocation.getCurrentPosition(
+      (position) => {
+        setPosition({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+      },
+      (error) => {
+        // See error code charts below.
+        console.log(error.code, error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+  );
   }
   console.log(position)
   useEffect(() => {
@@ -31,9 +45,9 @@ const Landing = ({navigation}) => {
   }, [])
   return (
     <View style={styles.container}>
-      <Overlay isVisible={loading}>
+      {/* <Overlay isVisible={loading}>
         <Text>Đang xử lý...</Text>
-       </Overlay>
+       </Overlay> */}
       <LottieView
       style={{width: 300,height: 300}}
       source={require('../../assets/lotties/food_landing.json')}

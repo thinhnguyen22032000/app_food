@@ -14,6 +14,7 @@ import Logo from '../../share/Logo';
 export default function Maneger({navigation}) {
   const {userInfo, logout} = useContext(UserContext);
   const [badge, setBadge] = useState(0);
+  console.log(userInfo.uid)
 
   const handleLogout = () => {
     Alert.alert(
@@ -43,6 +44,14 @@ export default function Maneger({navigation}) {
     return () => subscriber();
   }, []);
 
+  const fields = [
+    {title: 'Cửa hàng của tôi', page: 'Restaurants', icon: () => (<Ionicons name="restaurant-outline" size={sizeIcon.ICON_MANEGER} color="#333"/>)},
+    {title: 'Thêm cửa hàng', page: 'AddRestaurant', icon: () => (<IconAntDesign name="pluscircleo" size={sizeIcon.ICON_MANEGER} color="#333"/>)},
+    {title: 'Liên hệ với chúng tôi', page: 'Contact', icon: () => (<IconAntDesign name="phone" size={sizeIcon.ICON_MANEGER} color="#333"/>)},
+    {title: 'Danh sách yêu thích', page: 'FavoriteList', icon: () => (<IconAntDesign name="hearto" size={sizeIcon.ICON_MANEGER} color="#333"/>)},
+    {title: 'Giỏ hàng', page: 'Cart', icon: () => (<IconAntDesign name="shoppingcart" size={sizeIcon.ICON_MANEGER} color="#333"/>)},
+  ]
+
   return (
     <View style={styles.container}>
       <Logo />
@@ -63,42 +72,18 @@ export default function Maneger({navigation}) {
         </View>
       </View>
       <View style={styles.content}>
-        <ManegerItem
-          navigation={navigation}
-          title="Cửa hàng của tôi"
-          page="Restaurants"
-          icon={
-            <Ionicons
-              name="restaurant-outline"
-              size={sizeIcon.ICON_MANEGER}
-              color="#333"
-            />
-          }
-        />
-        <ManegerItem
-          navigation={navigation}
-          title="Thêm cửa hàng"
-          page="AddRestaurant"
-          icon={
-            <IconAntDesign
-              name="pluscircleo"
-              size={sizeIcon.ICON_MANEGER}
-              color="#333"
-            />
-          }
-        />
-        <ManegerItem
-          navigation={navigation}
-          title="Liên hệ với chúng tôi"
-          page="Contact"
-          icon={
-            <IconAntDesign
-              name="phone"
-              size={sizeIcon.ICON_MANEGER}
-              color="#333"
-            />
-          }
-        />
+        {
+          fields.map((item, index) => (
+            <ManegerItem
+            key={index}
+            navigation={navigation}
+            title={item.title}
+            page={item.page}
+            icon={item.icon()}
+          />
+          ))
+        }
+        {/* admin */}
         {userInfo.uid == ID_ADMIN && (
           <View>
             <ManegerItem
@@ -121,6 +106,18 @@ export default function Maneger({navigation}) {
           icon={
             <IconAntDesign
               name="phone"
+              size={sizeIcon.ICON_MANEGER}
+              color="#333"
+            />
+          }
+        />
+           <ManegerItem
+          navigation={navigation}
+          title="Tất cả cửa hàng"
+          page="RestaurantAll"
+          icon={
+            <IconAntDesign
+              name="barschart"
               size={sizeIcon.ICON_MANEGER}
               color="#333"
             />

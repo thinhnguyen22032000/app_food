@@ -14,16 +14,20 @@ const TagSelector = ({setTagSelector, tagSelector}) => {
     const [tagsFilter, setTagsFilter] = useState([])
 
   useEffect(() => { // get tags from db
-      firestore().collection('tags').get()
-     .then(data => {
-         const newData = []
-         data.forEach(item => {
-             newData.push({id: item.id, tag: item._data.tag})
-         })
-        setTags(newData)
-        setTagsFilter(newData)
-     })
-     .catch(err => console.log(err))
+     let isMounted = true
+     if(isMounted){
+       firestore().collection('tags').get()
+      .then(data => {
+          const newData = []
+          data.forEach(item => {
+              newData.push({id: item.id, tag: item._data.tag})
+          })
+         setTags(newData)
+         setTagsFilter(newData)
+      })
+      .catch(err => console.log(err))
+     }
+     return () => isMounted = false
   },[])
 
   const handlePopTag = item => {  // delete tag 
@@ -35,6 +39,7 @@ const TagSelector = ({setTagSelector, tagSelector}) => {
  
   // filter tags change
   useEffect(() => {
+
     let tagIdSelector = []
     tagSelector.forEach(tagSelector => {
       tagIdSelector.push(tagSelector.id)

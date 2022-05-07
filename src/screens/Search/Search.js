@@ -25,8 +25,13 @@ export default function Search({navigation}) {
   const [loading, setLoading] = useState(true)
   
   useEffect(() => {
-    let data = restaurants.sort((a, b) => a.distance - b.distance);
-    setData(data)
+    let isMounted = true
+    if(isMounted){
+      const data = restaurants.filter(item => item?.show !== false)
+      const arrange = data.sort((a, b) => a.distance - b.distance);
+      setData(arrange)
+    }
+    return () => isMounted = false
   }, [restaurants])
 
   return (

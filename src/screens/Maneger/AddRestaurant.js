@@ -4,10 +4,9 @@ import {
   Alert,
   Text,
   ScrollView,
-  TouchableOpacity,
 } from 'react-native';
 import React, {useContext, useState, useEffect} from 'react';
-import {Button, Divider} from 'react-native-elements';
+import {Divider} from 'react-native-elements';
 import {firestore} from '../../firebase/config';
 import {handleUpload} from '../../firebase/helpers';
 import {UserContext} from '../../contexts/userContext';
@@ -18,11 +17,10 @@ import {colors, margin} from '../../styleVariable';
 import TimerSelect from '../../components/TimerSelect';
 import CurrentImagePicker from '../../components/CurrentImagePicker';
 import TagSelector from '../../components/modal/tag/TagSelector';
-import Tag from '../../components/Tag';
-import TagItem from '../../components/modal/tag/TagItem';
 import ButtonCustom from '../../components/Button';
 import CategoriesSelector from '../../components/CategoriesSelector';
-import { showToast } from '../../toast';
+
+import {getCurrentDate} from '../../helpers'
 
 export default function AddRestaurant({navigation}) {
   const {userInfo} = useContext(UserContext);
@@ -39,8 +37,6 @@ export default function AddRestaurant({navigation}) {
   const [err, setErr] = useState(null)
   const [isHandle, setIsHandle] = useState(false)
 
-  // console.log(userInfo.email);
-
   const handleAddData = async () => {
     if(name !== '' && lang !== '' && lat !== '' && img != undefined ){
       setLoading(true);
@@ -48,8 +44,8 @@ export default function AddRestaurant({navigation}) {
         .collection('storePending')
         .add({
           name: name,
-          lang: lang,
-          lat: lat,
+          lang: lang.trim(),
+          lat: lat.trim(),
           img: await handleUpload(img.uri),
           activeTime: {
             open: timeOpen,
@@ -60,7 +56,8 @@ export default function AddRestaurant({navigation}) {
             email: userInfo.email,
           },
           tags: tagSelector,
-          category: category
+          category: category,
+          date_release: getCurrentDate()
         })
         .then(() => {
           setLoading(false);
@@ -77,7 +74,7 @@ export default function AddRestaurant({navigation}) {
   useEffect(() => {
     setTimeout(() => {
       if(isHandle){
-        navigation.navigate('Restaurants')
+        navigation.navigate('Maneger')
         Alert.alert('Thông báo', 'Thêm thành công!. Đang trong danh sách chờ');
       }
     }, 1000)
@@ -93,6 +90,12 @@ export default function AddRestaurant({navigation}) {
 
   if (loading) return <Loading />;
 
+  const fields = [
+    {required: true, errorMessage: err ,value:name, placeholder: 'Tên cửa hàng', onChangeText: setName, leftIcon: () => (<IconAntDesign name="home" size={20} />)},
+    {keyboardType:'numeric', required: true, errorMessage: err ,value:lang, placeholder: 'Kinh độ', onChangeText: setLang, leftIcon: () => (<IconAntDesign name="enviromento" size={20} />)},
+    {keyboardType:'numeric', required: true, errorMessage: err ,value:lat, placeholder: 'Vĩ độ', onChangeText: setLat, leftIcon: () => (<IconAntDesign name="enviromento" size={20} />)},
+  ]
+
   return (
     <ScrollView style={styles.container}>
       <View style={{margin: 10}}>
@@ -101,32 +104,21 @@ export default function AddRestaurant({navigation}) {
         <Text style={{color: colors.text_color}}>{`(*) thông tin không thể trống`}</Text>
       </View>
       <Divider style={{marginBottom: 20}}/>
-      <InputCustom
-       label={'Tên cửa hàng(*)'}
-        placeholder="Tên cửa hàng"
-        value={name}
-        onChangeText={setName}
-        leftIcon={<IconAntDesign name="home" size={20} />}
-        errorMessage={err}
+     {
+       fields.map((item, index) => (
+        <InputCustom
+        key={index}
+        required = {item.required}
+        placeholder = {item.placeholder} 
+        value={item.value}
+        onChangeText={item.onChangeText}
+        leftIcon={item.leftIcon}
+        errorMessage={item.errorMessage}
+        keyboardType={item.keyboardType || null}
+        label={item.placeholder}
       />
-
-      <InputCustom
-       label={'Tọa độ(*)'}
-        keyboardType='numeric'
-        placeholder="Longitude"
-        value={lang}
-        onChangeText={setLang}
-        leftIcon={<IconAntDesign name="enviromento" size={20} />}
-        errorMessage={err}
-      />
-      <InputCustom
-       label={'Tọa độ(*)'}
-        placeholder="Latitude"
-        value={lat}
-        onChangeText={setLat}
-        leftIcon={<IconAntDesign name="enviromento" size={20} />}
-        errorMessage={err}
-      />
+       ))
+     }
       <View>
         <Text style={{fontSize: 16, color: colors.text_color}}>
           Thời gian hoạt động (Giờ)
@@ -136,7 +128,7 @@ export default function AddRestaurant({navigation}) {
           <TimerSelect setTimeClose={setTimeClose} defaulText={'Đóng cửa'} />
         </View>
       </View>
-      <View style={[styles.section, margin.mt20]}>
+      <View style={[margin.mt20]}>
         {/* <View style={styles.tagsContainer}>
           {tagSelector.map(item => (
             <TouchableOpacity key={item.id} onPress={() => handlePopTag(item)}>

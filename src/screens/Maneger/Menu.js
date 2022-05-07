@@ -1,16 +1,20 @@
-import {StyleSheet, Text, View, TouchableOpacity, ToastAndroid} from 'react-native';
-import React, {useState} from 'react';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+
+
 import MenuModalAdd from '../../components/modal/menu/menu/MenuModalAdd';
 import PromotionModal from '../../components/modal/menu/promotion/PromotionModal';
 import {colors} from '../../styleVariable';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Toast from 'react-native-toast-message';
-import { Button } from 'react-native-elements';
+import IconAntDesign from 'react-native-vector-icons/AntDesign'
+
 
 const Menu = ({route, navigation}) => {
   const {item} = route.params;
-
+  
+  function handleToOrders(item){
+    navigation.navigate('Orders', {item: item})
+  }
   return (
     <View style={{padding: 20, flex: 1}}>
       <View>
@@ -23,12 +27,17 @@ const Menu = ({route, navigation}) => {
         Các chức năng giúp bạn quản lý cửa hàng tôt hơn.
       </Text>
       <View style={{marginTop: 20}}>
-        <View style={{marginBottom: 10}}>
+        <View style={{marginBottom: 10, marginLeft: 1}}>
         <MenuModalAdd titleModal={'Thêm thực đơn'} lable={'Thêm thực đơn'} item={item} navigation={navigation} />
         </View>
-        <View>
+        <View style={{ marginLeft: 1}}>
         <PromotionModal titleModal={'Thêm khuyến mãi'} lable={'Thêm khuyến mãi'} navigation={navigation} item={item} />
         </View>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
+          <IconAntDesign name="plus" size={18} />
+          <Text onPress={() => handleToOrders(item)} style={{fontSize: 18}}> Đơn hàng</Text>
+        </View>
+        
       </View>
     </View>
   );

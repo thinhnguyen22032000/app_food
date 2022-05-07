@@ -13,7 +13,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import {UserContext} from '../../contexts/userContext';
 
-import {center, colors, container, row} from '../../styleVariable';
+import {colors, container} from '../../styleVariable';
 
 import ItemView from '../../components/ResFlatListItem';
 import { getData, setData } from '../../localStorage.js/storage';
@@ -23,10 +23,10 @@ import Empty from '../../components/Empty';
 
 const SearchMain = ({navigation}) => {
   const {restaurants} = useContext(UserContext);
+  const [initialData, setInitialData] = useState([])
   const [dataFilter, setDataFilter] = useState([]);
   const [flag, setFlag] = useState(false);
   const [focus, setFocus] = useState(false)
-
   const [search, setSearch] = useState('');
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false)
@@ -37,7 +37,12 @@ const SearchMain = ({navigation}) => {
     getData()
     .then((data => setHistory(data)))
   }, [])
-
+  
+  // filter data is show === true
+  useEffect(() => {
+    const dataFilter = restaurants.filter((item) =>  item?.show != false? item : null)
+    setInitialData(dataFilter)
+  }, [])
   const handleSearch = text => {
     setLoading(true)
     setSearch(text);  
@@ -45,11 +50,13 @@ const SearchMain = ({navigation}) => {
     if(typingTimeoutRef.current){
       clearTimeout(typingTimeoutRef.current)
     }
+
     typingTimeoutRef.current = setTimeout(() => {
-      const data = restaurants.filter(item => {
+      const data = initialData.filter(item => {
         const isIn = item.name.toLowerCase().includes(text.toLowerCase());
         if (isIn) return item;
       });
+
       data.sort((a, b) => a.distance - b.distance);
       setFlag(true);
       setLoading(false)

@@ -13,6 +13,7 @@ const PromotionModal = ({item, navigation, lable, titleModal}) => {
     const [loading, setLoading] = useState(false);
     const [isHandle, setIsHandle] = useState(false)
     const [desc, setDesc] = useState(null)
+    const [date, setDate] = useState(new Date())
     
     const [isModalVisible, setModalVisible] = useState(false);
 
@@ -21,13 +22,13 @@ const PromotionModal = ({item, navigation, lable, titleModal}) => {
     };
     const loadData = () => {
         firestore().collection('restaurants').doc(item.id).get()
-        .then((data) => setDesc(data._data.promotion))
+        .then((data) => setDesc(data._data.promotion.promotion))
         .catch(err => console.log(err))
     }
 
     const handleAddPromotion = () => {
           setLoading(true)
-          updateData('restaurants', item.id, {promotion: promotion}, item)
+          updateData('restaurants', item.id, {promotion: {promotion:promotion, date_expire: date, }}, item)
             .then(() => {
               setLoading(false)
               setIsHandle(true)
@@ -49,11 +50,14 @@ const PromotionModal = ({item, navigation, lable, titleModal}) => {
                          })
        return () => subscribe()
     },[])
+
+    console.log("dateTimepicker",date)
   
   return (
-     <ModalBase lable={lable} titleModal={titleModal} funcHandle={handleAddPromotion} desc={desc} isModalVisible={isModalVisible} toggleModal={toggleModal}>
+     <ModalBase size={220} lable={lable} titleModal={titleModal} funcHandle={handleAddPromotion} desc={desc}
+      isModalVisible={isModalVisible} toggleModal={toggleModal}>
           <OverlayCustom loading={loading} />
-         <Item setPromotion={setPromotion}/>
+         <Item date={date} setDate={setDate}  setPromotion={setPromotion}/>
      </ModalBase>
   )
 }

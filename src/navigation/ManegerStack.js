@@ -6,18 +6,20 @@ import Maneger from '../screens/Maneger/Maneger';
 import Restaurants from '../screens/Maneger/Restaurants';
 import RestaurantsPending from '../screens/Maneger/RestaurantsPending';
 import { PRYMARY_COLOR } from '../styleVariable';
-import RestaurantDetail from '../screens/Maneger/RestaurantDetail';
 import RestaurantUpdate from '../screens/Maneger/RestaurantUpdate';
 import OverView from '../screens/Maneger/OverView';
 import Menu from '../screens/Maneger/Menu';
 import Contact from '../screens/Maneger/Contact';
 import AdminContact from '../screens/Maneger/AdminContact';
+import FavoriteList from '../screens/Maneger/FavoriteList';
+import RestaurantAll from '../screens/Maneger/RestaurantAll';
+import Cart from '../screens/Maneger/Cart';
+import Orders from '../screens/Maneger/Orders';
 const Stack = createNativeStackNavigator();
 
 export default function ManegerStack() {
   return (
     <Stack.Navigator
-   
       screenOptions={{
         headerStyle: {
           backgroundColor: '#fff', 
@@ -65,6 +67,22 @@ export default function ManegerStack() {
         name="AdminContact"
         component={AdminContact}
         options={{title: 'Liên hệ', headerTitleAlign: "center",}}></Stack.Screen>
+           <Stack.Screen
+        name="FavoriteList"
+        component={FavoriteList}
+        options={{title: 'Danh sách yêu thích', headerTitleAlign: "center",}}></Stack.Screen>
+           <Stack.Screen
+        name="RestaurantAll"
+        component={RestaurantAll}
+        options={{title: 'Tất cả cửa hàng', headerTitleAlign: "center",}}></Stack.Screen>
+            <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{title: 'Giỏ hàng', headerTitleAlign: "center",}}></Stack.Screen>
+           <Stack.Screen
+        name="Orders"
+        component={Orders}
+        options={{title: 'Đơn hàng', headerTitleAlign: "center",}}></Stack.Screen>
     </Stack.Navigator>
   );
 }

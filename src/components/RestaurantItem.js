@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {colors, shadowStyles} from '../styleVariable'
+import {colors, shadowStyles} from '../styleVariable';
 
 const RestaurantItem = ({navigation, item}) => {
   const handleDetail = item => {
@@ -15,25 +15,28 @@ const RestaurantItem = ({navigation, item}) => {
 
   const handleToMenu = item => {
     navigation.navigate('Menu', {item: item});
-  }
-
+  };
+  const temp = item?.promotion?.promotion
   return (
     <View style={[styles.item, shadowStyles.shadow]}>
       <TouchableOpacity
         style={styles.itemContent}
         onPress={() => handleDetail(item)}>
         <Image style={styles.img} source={{uri: item.img}} />
-        <Text>{item.name}</Text>
+        <View>
+          <Text style={{color: colors.text_color}}>{item.name}</Text>
+          <Text style={{color: colors.text_color}}>{temp && temp != "0"? `Đang khuyến mãi ${temp}%`: null}</Text>
+          <Text>Khai trương: {item?.date_release || '----'}</Text>
+        </View>
       </TouchableOpacity>
       <View style={styles.groupAction}>
-      <Text onPress={() => handleEdit(item)} style={{marginRight: 20}}>
-        <IconAntDesign name="edit" size={20} color="#333" />
-      </Text>
-      <Text onPress={() => handleToMenu(item)}>
-        <Entypo name="menu" size={20} color="#333" />
-      </Text>
+        <Text onPress={() => handleEdit(item)} style={{marginRight: 20}}>
+          <IconAntDesign name="edit" size={20} color="#333" />
+        </Text>
+        <Text onPress={() => handleToMenu(item)}>
+          <Entypo name="menu" size={20} color="#333" />
+        </Text>
       </View>
-
     </View>
   );
 };
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     marginBottom: 2,
     backgroundColor: colors.white_color,
-    padding: 10
+    padding: 10,
   },
   itemContent: {
     flexDirection: 'row',
@@ -64,6 +67,6 @@ const styles = StyleSheet.create({
   },
   groupAction: {
     marginLeft: 'auto',
-    flexDirection: 'row'
-  }
+    flexDirection: 'row',
+  },
 });

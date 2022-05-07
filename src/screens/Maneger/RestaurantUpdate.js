@@ -84,7 +84,6 @@ export default function RestaurantUpdate({route, navigation}) {
 
   useEffect(() => {
     setTimeout(() => {
-
       if(isHandle) {
          navigation.navigate('Restaurants')
       }
@@ -144,7 +143,7 @@ export default function RestaurantUpdate({route, navigation}) {
         </View>
       </View>
      {/* select */}
-      <View style={[styles.section, {marginBottom: 20}]}>
+      <View style={[{marginBottom: 20}]}>
         {/* <View style={styles.tagsContainer}>
           {tagSelector.map(item => (
             <TouchableOpacity key={item.id} onPress={() => handlePopTag(item)}>
@@ -179,7 +178,7 @@ export default function RestaurantUpdate({route, navigation}) {
      <View style={{flex: 1, alignItems: 'center'}}>
      <ButtonCustom
         title={'Cập nhật'}
-        bgColor={'#3241ed'}
+        bgColor={colors.blue_color}
         onPress={() => handleUpdate(item)}
         width={'94%'}
       />

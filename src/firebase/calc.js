@@ -6,5 +6,5 @@ export const timeCalc = (value, fix) => {
 }
 
 export function formatVnd(n) {
-    return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+    return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 }

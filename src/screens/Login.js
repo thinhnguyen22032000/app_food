@@ -4,38 +4,63 @@ import {
   View,
  } from 'react-native';
 import React, {useState, useContext, useEffect} from 'react';
-import { login } from '../firebase/auth';
+import { login, loginWidthGoogle } from '../firebase/auth';
+import { auth } from '../firebase/config';
 import InputCustom from '../components/Input'
 import ButtonCustom from '../components/Button';
 import { colors } from '../styleVariable';
 import { UserContext } from '../contexts/userContext';
-import { Overlay } from 'react-native-elements';
+import { Button, Overlay } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { sizeIcon } from '../styleVariable';
 import Logo from '../share/Logo'
 import LottieView from 'lottie-react-native';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+
+
+GoogleSignin.configure({
+  webClientId: "950153550731-hfrc7tlcbb28f6anuqke35qvaeadls29.apps.googleusercontent.com"
+});
+
 
 export default function Login({navigation}) {
+  const {position, userInfo, authCache, setAuthCache} = useContext(UserContext)
+
   const {ICON_INPUT} = sizeIcon
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(authCache.email);
   const [password, setPassword] = useState('');
   const [notify, setNotify] = useState('')
   const [err, setErr] = useState(null)
   const [isFocus, setIsFocus] = useState(false)
-  const {position, userInfo} = useContext(UserContext)
   const [loading, setLoading] = useState(true)
 
   const handleFocusInput = () => {
     setErr('')
   }
+  console.log('authCache',authCache)
+  const signIn = async () => {
+    try {
+      const { idToken } = await GoogleSignin.signIn();
 
+  // Create a Google credential with the token
+  const googleCredential = await auth.GoogleAuthProvider.credential(idToken);
+
+  // Sign-in the user with the credential
+  const res = await auth().signInWithCredential(googleCredential);
+  console.log(res)
+    } catch (error) {
+     console.log(error)
+
+      
+    }
+  };
   useEffect(() => {
    let isMounted = true
    setLoading(false)
    setTimeout(() => {
     if(isMounted) {
       if(userInfo) {
-        console.log(userInfo)
+        console.log(typeof userInfo)
         console.log('chuyển landing')
         return  navigation.navigate('Landing')
       }
@@ -47,8 +72,9 @@ export default function Login({navigation}) {
   const handleLogin = () => {
     if(email !== '' && password !== ''){
       setLoading(true)
-      login(email, password)
+      login(email.trim(), password.trim())
       .then(() => {
+        setAuthCache({email: email})
         setLoading(false)
          navigation.navigate('Landing') 
       })
@@ -94,6 +120,7 @@ export default function Login({navigation}) {
       <View style={styles.registerView}>
         <Text>Bạn chưa có tài khoản?. <Text style={styles.registerTxt} onPress={()=>{navigation.navigate('register')}}>Đăng ký</Text></Text>
       </View>
+      <Button title={'google sign'} onPress={signIn}/>
     </View>
   );
 }

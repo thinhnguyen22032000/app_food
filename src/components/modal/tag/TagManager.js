@@ -56,6 +56,7 @@ const TagManager = ({size}) => {
               <Text style={styles.title}>Tạo hashtag</Text>
             </View>
             <InputCustom
+              required
               value={tag}
               onChangeText={setTag}
               placeholder={'Nhập hashtag'}

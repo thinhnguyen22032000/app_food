@@ -31,10 +31,10 @@ const OverView = ({route}) => {
         <Text style={[styles.title, styles.spacing]}>Hoạt động</Text>
           <View>
           <Text style={styles.spacing}>
-              Thời gian mở cửa: <Text style={styles.subtitle}>{item?.activeTime.open || '--'}h</Text>
+              Thời gian mở cửa: <Text style={styles.subtitle}>{item?.activeTime?.open || '--'}h</Text>
             </Text>
             <Text style={styles.spacing}>
-            Thời gian mở cửa: <Text style={styles.subtitle}>{item?.activeTime.close || '--'}h</Text>
+            Thời gian mở cửa: <Text style={styles.subtitle}>{item?.activeTime?.close || '--'}h</Text>
             </Text>
           </View>
         </View>

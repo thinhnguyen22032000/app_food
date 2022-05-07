@@ -14,20 +14,25 @@ const InputCustom = ({
   label,
   secureTextEntry,
   keyboardType,
-  height
+  height,
+  required
 
 }) => {
   const [isFocus, setIsFocus] = useState(false)
 
   const borderColorStyle = isFocus?colors.gray_color:colors.borderColor
+  // const borderColorStyleErr = errorMessage?colors.prymary_color:colors.gray_color
 
   const handleChangeFocus = () => {
     setIsFocus(!isFocus)
   }
   const setHeight = height?height:40
+  const requireChar = required?'(*)':''
   return (
+    <>
+      <Text style={{marginLeft: 10, marginBottom: 1, color: colors.text_color}}>{`${label?label:''} ${requireChar}`}</Text>
       <Input
-        label={label}
+
         onBlur={handleChangeFocus}
         onFocus={handleChangeFocus}
         keyboardType={keyboardType}
@@ -46,6 +51,7 @@ const InputCustom = ({
           borderRadius: 4,
         }}
       />
+    </>
   );
 };
 

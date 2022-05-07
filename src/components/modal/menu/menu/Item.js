@@ -6,9 +6,9 @@ import CurrentImagePicker from '../../../CurrentImagePicker'
 const Item = ({setName, setPrice, setImg, img, err}) => {
   return (
     <View>
-         <InputCustom width={'90%'} errorMessage={err} onChangeText={setName} placeholder={'Tên món ăn...'} />
-         <InputCustom width={'90%'} errorMessage={err} onChangeText={setPrice} placeholder={'Giá...'} />
-         <CurrentImagePicker error={err} img={img} setImg={setImg} />
+         <InputCustom label={'Tên món'} required width={'90%'} errorMessage={err} onChangeText={setName} placeholder={'Tên món ăn...'} />
+         <InputCustom label={'Giá'} required width={'90%'} errorMessage={err} onChangeText={setPrice} placeholder={'Giá...'} />
+         <CurrentImagePicker required error={err} img={img} setImg={setImg} />
     </View>
   )
 }
